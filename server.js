@@ -8,7 +8,7 @@ const morgan = require('morgan')
 const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 
-const {computeStats} = require('./lib/stats')
+const {computeStats, computePeriodsStats} = require('./lib/stats')
 
 const app = express()
 
@@ -23,10 +23,24 @@ app.get('/stats', w(async (req, res) => {
   res.send(stats)
 }))
 
+const PERIODS_TYPES = new Set(['day', 'week', 'month', 'year'])
+
+app.get('/stats/:periodType', w(async (req, res) => {
+  const {periodType} = req.params
+
+  if (!PERIODS_TYPES.has(periodType)) {
+    return res.sendStatus(404)
+  }
+
+  const stats = await computePeriodsStats(periodType)
+  res.send(stats)
+}))
+
 const port = process.env.PORT || 5000
 
 async function main() {
   await mongo.connect()
+
   app.listen(port, () => {
     console.log(`Start listening on port ${port}!`)
   })
