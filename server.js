@@ -44,6 +44,9 @@ async function main() {
   app.listen(port, () => {
     console.log(`Start listening on port ${port}!`)
   })
+
+  // Précalcul des données
+  await Promise.all([...PERIODS_TYPES].map(periodType => computePeriodsStats(periodType)))
 }
 
 main().catch(error => {
