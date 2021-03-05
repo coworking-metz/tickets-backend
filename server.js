@@ -7,6 +7,7 @@ const morgan = require('morgan')
 
 const mongo = require('./lib/mongo')
 const w = require('./lib/w')
+const cache = require('./lib/cache')
 
 const {computeStats, computePeriodsStats} = require('./lib/stats')
 
@@ -40,6 +41,7 @@ const port = process.env.PORT || 5000
 
 async function main() {
   await mongo.connect()
+  await cache.load()
 
   app.listen(port, () => {
     console.log(`Start listening on port ${port}!`)
