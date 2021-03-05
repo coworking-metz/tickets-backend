@@ -24,7 +24,8 @@
     "space": 2,
     "rules": {
       "camelcase": "off",
-      "unicorn/prevent-abbreviations": "off"
+      "unicorn/prevent-abbreviations": "off",
+      "unicorn/no-array-callback-reference": "off"
     }
   }
 }
