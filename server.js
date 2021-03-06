@@ -4,12 +4,13 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const Papa = require('papaparse')
 
 const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 const cache = require('./lib/cache')
 
-const {computeStats, computePeriodsStats} = require('./lib/stats')
+const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 
 const app = express()
 
@@ -34,6 +35,13 @@ app.get('/stats/:periodType', w(async (req, res) => {
   }
 
   const stats = await computePeriodsStats(periodType)
+
+  if (req.query.format === 'csv') {
+    return res.type('text/csv').send(
+      Papa.unparse(stats.map(s => asCsv(s)))
+    )
+  }
+
   res.send(stats)
 }))
 
