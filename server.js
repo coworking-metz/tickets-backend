@@ -9,6 +9,7 @@ const Papa = require('papaparse')
 const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 const cache = require('./lib/cache')
+const netatmo = require('./lib/netatmo')
 
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 
@@ -43,6 +44,15 @@ app.get('/stats/:periodType', w(async (req, res) => {
   }
 
   res.send(stats)
+}))
+
+app.get('/netatmo/stations', w(async (req, res) => {
+  if (!netatmo.isConfigured()) {
+    return res.status(501).send({code: 501, message: 'Non disponible. Netatmo n’est pas configuré.'})
+  }
+
+  const stations = await netatmo.getStations()
+  res.send(stations)
 }))
 
 const port = process.env.PORT || 5000
