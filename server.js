@@ -56,7 +56,9 @@ async function main() {
   })
 
   // Précalcul des données
-  await Promise.all([...PERIODS_TYPES].map(periodType => computePeriodsStats(periodType)))
+  if (process.env.PRECOMPUTE_STATS === '1') {
+    await Promise.all([...PERIODS_TYPES].map(periodType => computePeriodsStats(periodType)))
+  }
 }
 
 main().catch(error => {
