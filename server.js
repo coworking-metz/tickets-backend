@@ -60,8 +60,14 @@ app.get('/netatmo/stations', w(async (req, res) => {
 app.get('/coworkersNow', w(coworkersNow))
 app.post('/coworkersNow', w(coworkersNow))
 
-app.get('/balance-json', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
-app.post('/balance-json', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getBalance))
+app.get('/api/coworkers-now', w(coworkersNow))
+app.post('/api/coworkers-now', w(coworkersNow))
+
+app.get('/api/balance', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
+app.post('/api/balance', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getBalance))
+
+app.get('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
+app.post('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getBalance))
 
 const port = process.env.PORT || 5000
 
