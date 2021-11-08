@@ -71,11 +71,11 @@ function checkKey(key) {
 }
 
 async function coworkersNow(req, res) {
-  const tenMinutesAgo = sub(new Date(), {minutes: 10})
+  const tenMinutesAgo = sub(new Date(), {minutes: 10}).toISOString()
   const count = await mongo.db.collection('users').count({
     'profile.heartbeat': {$gt: tenMinutesAgo}
   })
-  res.send(count)
+  res.send(200, count)
 }
 
 app.get('/coworkersNow', w(coworkersNow))
