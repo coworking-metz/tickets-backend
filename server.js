@@ -61,7 +61,7 @@ app.get('/coworkersNow', w(coworkersNow))
 app.post('/coworkersNow', w(coworkersNow))
 
 app.get('/balance-json', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
-app.post('/balance-json', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded(), w(getBalance))
+app.post('/balance-json', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getBalance))
 
 const port = process.env.PORT || 5000
 
