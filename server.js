@@ -10,7 +10,8 @@ const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
-const {coworkersNow} = require('./lib/api')
+const {coworkersNow, getBalance} = require('./lib/api')
+const {checkKey} = require('./lib/auth')
 
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 
@@ -58,6 +59,9 @@ app.get('/netatmo/stations', w(async (req, res) => {
 
 app.get('/coworkersNow', w(coworkersNow))
 app.post('/coworkersNow', w(coworkersNow))
+
+app.get('/balance-json', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
+app.post('/balance-json', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded(), w(getBalance))
 
 const port = process.env.PORT || 5000
 
