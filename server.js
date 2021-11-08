@@ -10,7 +10,7 @@ const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
-const {coworkersNow, getBalance} = require('./lib/api')
+const {coworkersNow, getUserStats, getUserPresences} = require('./lib/api')
 const {checkKey} = require('./lib/auth')
 
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
@@ -63,11 +63,14 @@ app.post('/coworkersNow', w(coworkersNow))
 app.get('/api/coworkers-now', w(coworkersNow))
 app.post('/api/coworkers-now', w(coworkersNow))
 
-app.get('/api/balance', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
-app.post('/api/balance', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getBalance))
+app.get('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
+app.post('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserStats))
 
-app.get('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), w(getBalance))
-app.post('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getBalance))
+app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
+app.post('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserStats))
+
+app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
+app.post('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserPresences))
 
 const port = process.env.PORT || 5000
 
