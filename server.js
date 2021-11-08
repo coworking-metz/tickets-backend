@@ -5,12 +5,12 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const Papa = require('papaparse')
-const {sub} = require('date-fns')
 
 const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
+const {coworkersNow} = require('./lib/api')
 
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 
@@ -55,28 +55,6 @@ app.get('/netatmo/stations', w(async (req, res) => {
   const stations = await netatmo.getStations()
   res.send(stations)
 }))
-
-function checkKey(key) {
-  if (!key) {
-    throw new Error('API key not defined')
-  }
-
-  return (req, res, next) => {
-    if (req.body.key !== key) {
-      return res.status(403).send('Invalid API key.\n')
-    }
-
-    next()
-  }
-}
-
-async function coworkersNow(req, res) {
-  const tenMinutesAgo = sub(new Date(), {minutes: 10}).toISOString()
-  const count = await mongo.db.collection('users').count({
-    'profile.heartbeat': {$gt: tenMinutesAgo}
-  })
-  res.send(200, count)
-}
 
 app.get('/coworkersNow', w(coworkersNow))
 app.post('/coworkersNow', w(coworkersNow))
