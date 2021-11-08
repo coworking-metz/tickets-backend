@@ -47,8 +47,8 @@ app.get('/stats/:periodType', w(async (req, res) => {
 }))
 
 app.get('/netatmo/stations', w(async (req, res) => {
-  if (!netatmo.isConfigured()) {
-    return res.status(501).send({code: 501, message: 'Non disponible. Netatmo n’est pas configuré.'})
+  if (!netatmo.isAvailable()) {
+    return res.status(500).send({code: 500, message: 'Non disponible. Netatmo n’est pas configuré.'})
   }
 
   const stations = await netatmo.getStations()
