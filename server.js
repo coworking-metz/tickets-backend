@@ -10,7 +10,7 @@ const mongo = require('./lib/mongo')
 const w = require('./lib/w')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
-const {coworkersNow, getUserStats, getUserPresences, heartbeat} = require('./lib/api')
+const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses} = require('./lib/api')
 const {checkKey} = require('./lib/auth')
 
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
@@ -73,6 +73,7 @@ app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(getUser
 app.post('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserPresences))
 
 app.post('/api/heartbeat', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(heartbeat))
+app.post('/api/mac', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(getMacAddresses))
 
 const port = process.env.PORT || 5000
 
