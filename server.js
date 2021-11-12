@@ -63,9 +63,6 @@ app.post('/coworkersNow', w(coworkersNow))
 app.get('/api/coworkers-now', w(coworkersNow))
 app.post('/api/coworkers-now', w(coworkersNow))
 
-app.get('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
-app.post('/balance-json2', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserStats))
-
 app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
 app.post('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserStats))
 
