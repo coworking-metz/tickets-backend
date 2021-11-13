@@ -5,6 +5,8 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const Papa = require('papaparse')
+const session = require('express-session')
+const {add} = require('date-fns')
 
 const mongo = require('./lib/util/mongo')
 const w = require('./lib/util/w')
@@ -19,9 +21,27 @@ const app = express()
 
 app.use(cors({origin: true}))
 
+const sessionOptions = {
+  cookie: {
+    expires: add(new Date(), {days: 14}),
+    httpOnly: false,
+    sameSite: true
+  },
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.SESSION_SECRET
+}
+
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1)
+  sessionOptions.cookie.secure = true
+}
+
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
+
+app.use(session(sessionOptions))
 
 app.get('/stats', w(async (req, res) => {
   const stats = await computeStats()
