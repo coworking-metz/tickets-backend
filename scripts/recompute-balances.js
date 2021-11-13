@@ -15,6 +15,7 @@ async function main() {
   }
 
   console.log('Completed!')
+  await mongo.disconnect()
 }
 
 main().catch(error => {
