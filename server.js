@@ -8,6 +8,7 @@ const Papa = require('papaparse')
 const session = require('express-session')
 const {add} = require('date-fns')
 const MongoStore = require('connect-mongo')
+const passport = require('passport')
 
 const mongo = require('./lib/util/mongo')
 const w = require('./lib/util/w')
@@ -21,6 +22,7 @@ const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 async function main() {
   await mongo.connect()
   await cache.load()
+  require('./lib/util/passport').config()
 
   const app = express()
 
@@ -48,6 +50,8 @@ async function main() {
   }
 
   app.use(session(sessionOptions))
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   app.get('/stats', w(async (req, res) => {
     const stats = await computeStats()
@@ -103,6 +107,20 @@ async function main() {
 
   app.post('/api/purchase-webhook', express.json(), w(purchaseWebhook))
   app.post('/wook', express.json(), w(purchaseWebhook))
+
+  app.get('/api/login', passport.authenticate('wordpress'))
+  app.get('/api/login/return', passport.authenticate('wordpress', {
+    successRedirect: '/api/me',
+    failureRedirect: '/'
+  }))
+
+  app.get('/api/me', (req, res) => {
+    if (!req.user) {
+      return res.sendStatus(401)
+    }
+
+    res.send(req.user)
+  })
 
   const port = process.env.PORT || 5000
 
