@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 require('dotenv').config()
 
-const mongo = require('../lib/mongo')
+const mongo = require('../lib/util/mongo')
 const {updateBalance} = require('../lib/models')
 
 async function main() {
