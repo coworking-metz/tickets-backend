@@ -31,8 +31,7 @@ async function main() {
   const sessionOptions = {
     cookie: {
       expires: add(new Date(), {days: 14}),
-      httpOnly: false,
-      sameSite: true
+      httpOnly: false
     },
     resave: false,
     saveUninitialized: false,
