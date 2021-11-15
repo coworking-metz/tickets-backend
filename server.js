@@ -92,19 +92,19 @@ async function main() {
   app.post('/api/coworkers-now', w(coworkersNow))
 
   app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
-  app.post('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserStats))
+  app.post('/api/user-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
 
   app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
-  app.post('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), express.urlencoded({extended: false}), w(getUserPresences))
+  app.post('/api/user-presences', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
 
   app.get('/api/users-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUsersStats))
   app.post('/api/users-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUsersStats))
 
-  app.post('/api/heartbeat', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(heartbeat))
-  app.post('/api/mac', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(getMacAddresses))
-  app.post('/api/presence', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(updatePresence))
-  app.post('/api/collections-data', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(getCollectionsData))
-  app.post('/api/notify', checkKey(process.env.PRESENCE_API_KEY), express.urlencoded({extended: false}), w(notify))
+  app.post('/api/heartbeat', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(heartbeat))
+  app.post('/api/mac', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getMacAddresses))
+  app.post('/api/presence', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(updatePresence))
+  app.post('/api/collections-data', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getCollectionsData))
+  app.post('/api/notify', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(notify))
 
   app.post('/api/purchase-webhook', express.json(), w(purchaseWebhook))
   app.post('/wook', express.json(), w(purchaseWebhook))
