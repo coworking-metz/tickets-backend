@@ -119,7 +119,6 @@ async function main() {
     }
   })
   app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
-  app.post('/wook', validateAndParseJson, w(purchaseWebhook))
 
   app.get('/api/login', passport.authenticate('wordpress'))
   app.get('/api/login/return', passport.authenticate('wordpress', {
