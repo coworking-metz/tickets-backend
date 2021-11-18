@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 require('dotenv').config()
 
+const crypto = require('crypto')
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
@@ -106,8 +107,19 @@ async function main() {
   app.post('/api/collections-data', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getCollectionsData))
   app.post('/api/notify', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(notify))
 
-  app.post('/api/purchase-webhook', express.json(), w(purchaseWebhook))
-  app.post('/wook', express.json(), w(purchaseWebhook))
+  const validateAndParseJson = express.json({
+    verify(req, res, buf) {
+      const computedSignature = crypto.createHmac('sha256', process.env.WP_WC_WEBHOOK_SECRET)
+        .update(buf, 'utf8')
+        .digest('base64')
+
+      if (req.get('x-wc-webhook-signature') !== computedSignature) {
+        throw new Error('Webhook signature mismatch')
+      }
+    }
+  })
+  app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
+  app.post('/wook', validateAndParseJson, w(purchaseWebhook))
 
   app.get('/api/login', passport.authenticate('wordpress'))
   app.get('/api/login/return', passport.authenticate('wordpress', {
