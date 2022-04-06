@@ -15,7 +15,7 @@ const mongo = require('./lib/util/mongo')
 const w = require('./lib/util/w')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
-const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers} = require('./lib/api')
+const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
 const {checkKey} = require('./lib/auth')
 
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
@@ -97,6 +97,8 @@ async function main() {
 
   app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
   app.post('/api/user-presences', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
+
+  app.get('/api/voting-coworkers', checkKey(process.env.PURCHASE_API_KEY), w(getVotingCoworkers))
 
   app.get('/api/users-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUsersStats))
   app.post('/api/users-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUsersStats))
