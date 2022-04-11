@@ -139,6 +139,10 @@ async function main() {
     res.send(req.user)
   })
 
+  app.get('/api/token', checkKey(process.env.TICKETS_TOKEN), (req, res) => {
+    res.send({status: 'ok'})
+  })
+
   const port = process.env.PORT || 5000
 
   app.listen(port, () => {
