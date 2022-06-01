@@ -13,6 +13,7 @@ const passport = require('passport')
 
 const mongo = require('./lib/util/mongo')
 const w = require('./lib/util/w')
+const errorHandler = require('./lib/util/error-handler')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
 const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
@@ -149,6 +150,8 @@ async function main() {
   app.get('/api/token', checkKey(process.env.TICKETS_TOKEN), (req, res) => {
     res.send({status: 'ok'})
   })
+
+  app.use(errorHandler)
 
   const port = process.env.PORT || 5000
 
