@@ -18,6 +18,7 @@ const netatmo = require('./lib/netatmo')
 const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
 const {checkKey} = require('./lib/auth')
 
+const {parseFromTo} = require('./lib/dates')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 
 async function main() {
@@ -66,7 +67,13 @@ async function main() {
       return res.sendStatus(404)
     }
 
-    const stats = await computePeriodsStats(periodType, {includesCurrent: req.query.includesCurrent === '1'})
+    const {from, to} = parseFromTo(req.query.from, req.query.to)
+
+    const stats = await computePeriodsStats(periodType, {
+      includesCurrent: req.query.includesCurrent === '1',
+      from,
+      to
+    })
 
     if (req.query.format === 'csv') {
       return res.type('text/csv').send(
