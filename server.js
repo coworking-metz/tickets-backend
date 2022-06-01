@@ -66,7 +66,7 @@ async function main() {
       return res.sendStatus(404)
     }
 
-    const stats = await computePeriodsStats(periodType)
+    const stats = await computePeriodsStats(periodType, {includesCurrent: req.query.includesCurrent === '1'})
 
     if (req.query.format === 'csv') {
       return res.type('text/csv').send(
