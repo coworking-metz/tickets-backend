@@ -20,6 +20,7 @@ const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses,
 const {checkKey} = require('./lib/auth')
 
 const {parseFromTo} = require('./lib/dates')
+const {computeIncomes} = require('./lib/models')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
 
 async function main() {
@@ -75,6 +76,26 @@ async function main() {
       from,
       to
     })
+
+    if (req.query.format === 'csv') {
+      return res.type('text/csv').send(
+        Papa.unparse(stats.map(s => asCsv(s)))
+      )
+    }
+
+    res.send(stats)
+  }))
+
+  app.get('/stats/incomes/:periodType', w(async (req, res) => {
+    const {periodType} = req.params
+
+    if (!PERIODS_TYPES.has(periodType)) {
+      return res.sendStatus(404)
+    }
+
+    const {from, to} = parseFromTo(req.query.from, req.query.to)
+
+    const stats = await computeIncomes(periodType, from, to)
 
     if (req.query.format === 'csv') {
       return res.type('text/csv').send(
