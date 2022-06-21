@@ -16,7 +16,7 @@ const w = require('./lib/util/w')
 const errorHandler = require('./lib/util/error-handler')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
-const {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
+const {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
 const {checkKey} = require('./lib/auth')
 
 const {parseFromTo} = require('./lib/dates')
@@ -121,11 +121,11 @@ async function main() {
   app.get('/api/coworkers-now', w(coworkersNow))
   app.post('/api/coworkers-now', w(coworkersNow))
 
-  app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
-  app.post('/api/user-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUserStats))
+  app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
+  app.post('/api/user-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
 
-  app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
-  app.post('/api/user-presences', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUserPresences))
+  app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
+  app.post('/api/user-presences', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
 
   app.get('/api/voting-coworkers', checkKey(process.env.PURCHASE_API_KEY), w(getVotingCoworkers))
 
