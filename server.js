@@ -123,9 +123,11 @@ async function main() {
 
   app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
   app.post('/api/user-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
+  app.get('/api/users/:userId/stats', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
 
   app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
   app.post('/api/user-presences', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
+  app.get('/api/users/:userId/presences', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
 
   app.get('/api/voting-coworkers', checkKey(process.env.PURCHASE_API_KEY), w(getVotingCoworkers))
 
