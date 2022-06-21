@@ -16,7 +16,7 @@ const w = require('./lib/util/w')
 const errorHandler = require('./lib/util/error-handler')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
-const {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
+const {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
 const {checkKey} = require('./lib/auth')
 
 const {parseFromTo} = require('./lib/dates')
@@ -138,6 +138,7 @@ async function main() {
   app.post('/api/current-users', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getCurrentUsers))
 
   app.post('/api/heartbeat', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(heartbeat))
+  app.get('/api/mac', checkKey(process.env.PRESENCE_API_KEY), w(getMacAddresses))
   app.post('/api/mac', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getMacAddressesLegacy))
   app.post('/api/presence', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(updatePresence))
   app.post('/api/collections-data', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getCollectionsData))
