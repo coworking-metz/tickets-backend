@@ -99,7 +99,13 @@ async function main() {
 
     if (req.query.format === 'csv') {
       return res.type('text/csv').send(
-        Papa.unparse(stats.map(s => asCsv(s)))
+        Papa.unparse(stats.map(s => ({
+          date: s.date,
+          type: s.type,
+          used_tickets: s.data.usedTickets,
+          days_abos: s.data.daysAbo,
+          incomes: s.data.incomes
+        })))
       )
     }
 
