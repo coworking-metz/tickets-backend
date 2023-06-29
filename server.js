@@ -17,11 +17,13 @@ const errorHandler = require('./lib/util/error-handler')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
 const {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
-const {checkKey} = require('./lib/auth')
+const {checkToken} = require('./lib/auth')
 
 const {parseFromTo} = require('./lib/dates')
 const {computeIncomes} = require('./lib/models')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
+
+const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
 async function main() {
   await mongo.connect()
@@ -127,28 +129,28 @@ async function main() {
   app.get('/api/coworkers-now', w(coworkersNow))
   app.post('/api/coworkers-now', w(coworkersNow))
 
-  app.get('/api/user-stats', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
-  app.post('/api/user-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
-  app.get('/api/users/:userId/stats', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserStats))
+  app.get('/api/user-stats', checkToken(adminTokens), w(resolveUser), w(getUserStats))
+  app.post('/api/user-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUser), w(getUserStats))
+  app.get('/api/users/:userId/stats', checkToken(adminTokens), w(resolveUser), w(getUserStats))
 
-  app.get('/api/user-presences', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
-  app.post('/api/user-presences', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
-  app.get('/api/users/:userId/presences', checkKey(process.env.PURCHASE_API_KEY), w(resolveUser), w(getUserPresences))
+  app.get('/api/user-presences', checkToken(adminTokens), w(resolveUser), w(getUserPresences))
+  app.post('/api/user-presences', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUser), w(getUserPresences))
+  app.get('/api/users/:userId/presences', checkToken(adminTokens), w(resolveUser), w(getUserPresences))
 
-  app.get('/api/voting-coworkers', checkKey(process.env.PURCHASE_API_KEY), w(getVotingCoworkers))
+  app.get('/api/voting-coworkers', checkToken(adminTokens), w(getVotingCoworkers))
 
-  app.get('/api/users-stats', checkKey(process.env.PURCHASE_API_KEY), w(getUsersStats))
-  app.post('/api/users-stats', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getUsersStats))
+  app.get('/api/users-stats', checkToken(adminTokens), w(getUsersStats))
+  app.post('/api/users-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(getUsersStats))
 
-  app.get('/api/current-users', checkKey(process.env.PURCHASE_API_KEY), w(getCurrentUsers))
-  app.post('/api/current-users', express.urlencoded({extended: false}), checkKey(process.env.PURCHASE_API_KEY), w(getCurrentUsers))
+  app.get('/api/current-users', checkToken(adminTokens), w(getCurrentUsers))
+  app.post('/api/current-users', express.urlencoded({extended: false}), checkToken(adminTokens), w(getCurrentUsers))
 
-  app.post('/api/heartbeat', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(heartbeat))
-  app.get('/api/mac', checkKey(process.env.PRESENCE_API_KEY), w(getMacAddresses))
-  app.post('/api/mac', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getMacAddressesLegacy))
-  app.post('/api/presence', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(updatePresence))
-  app.post('/api/collections-data', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(getCollectionsData))
-  app.post('/api/notify', express.urlencoded({extended: false}), checkKey(process.env.PRESENCE_API_KEY), w(notify))
+  app.post('/api/heartbeat', express.urlencoded({extended: false}), checkToken(adminTokens), w(heartbeat))
+  app.get('/api/mac', checkToken(adminTokens), w(getMacAddresses))
+  app.post('/api/mac', express.urlencoded({extended: false}), checkToken(adminTokens), w(getMacAddressesLegacy))
+  app.post('/api/presence', express.urlencoded({extended: false}), checkToken(adminTokens), w(updatePresence))
+  app.post('/api/collections-data', express.urlencoded({extended: false}), checkToken(adminTokens), w(getCollectionsData))
+  app.post('/api/notify', express.urlencoded({extended: false}), checkToken(adminTokens), w(notify))
 
   const validateAndParseJson = express.json({
     verify(req, res, buf) {
