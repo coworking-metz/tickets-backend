@@ -10,6 +10,7 @@ const session = require('express-session')
 const {add} = require('date-fns')
 const MongoStore = require('connect-mongo')
 const passport = require('passport')
+const got = require('got')
 
 const mongo = require('./lib/util/mongo')
 const w = require('./lib/util/w')
@@ -179,9 +180,14 @@ async function main() {
     res.send(req.user)
   })
 
-  app.get('/api/token', checkKey(process.env.TICKETS_TOKEN), (req, res) => {
+  app.get('/api/token', checkToken(adminTokens), (req, res) => {
     res.send({status: 'ok'})
   })
+
+  app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
+    await got.post(process.env.INTERPHONE_URL)
+    res.status(202).send({message: 'Ouverture du portail demandée'})
+  }))
 
   app.use(errorHandler)
 
