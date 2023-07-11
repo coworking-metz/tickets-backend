@@ -19,7 +19,7 @@ const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
 const { coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers } = require('./lib/api')
 const { checkToken } = require('./lib/auth')
-const { connexion } = require('./lib/connexion')
+const { connexion, checkSession, deleteSession } = require('./lib/connexion')
 
 const { parseFromTo } = require('./lib/dates')
 const { computeIncomes } = require('./lib/models')
@@ -42,7 +42,7 @@ async function main() {
       httpOnly: false
     },
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     secret: process.env.SESSION_SECRET,
     store: MongoStore.create({ client: mongo.client })
   }
@@ -189,6 +189,8 @@ async function main() {
    * COWO API 
    */
   app.post('/api/connexion', express.urlencoded({ extended: false }), checkToken(adminTokens), connexion)
+  app.post('/api/session', express.urlencoded({ extended: false }), checkToken(adminTokens), checkSession)
+  app.delete('/api/session', express.urlencoded({ extended: false }), checkToken(adminTokens), deleteSession)
 
 
   /**
