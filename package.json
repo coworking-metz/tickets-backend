@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node server",
+    "dev": "nodemon server",
     "lint": "xo"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "passport-openidconnect": "^0.0.2"
   },
   "devDependencies": {
+    "nodemon": "^3.0.1",
     "xo": "^0.48.0"
   },
   "xo": {
