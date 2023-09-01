@@ -18,12 +18,18 @@ Requirements for the software and other tools to build, test and push
 
 ### Install
 
-A step by step series of examples that tell you how to get a development environment running:
+A step by step series of examples that tell you how to get a development environment running
 
 ```bash
 git clone git@github.com:coworking-metz/tickets-backend.git
 cd tickets-backend
 yarn
+```
+
+Copy the default environment file and set variable according to your will
+
+```bash
+cp .env.sample .env
 ```
 
 ### Initialize database with an archive
