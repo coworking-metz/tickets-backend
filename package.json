@@ -1,9 +1,10 @@
 {
   "name": "@coworking-metz/tickets-stats",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "scripts": {
+    "dev": "PORT=8000 yarn start",
     "start": "node server",
     "lint": "xo"
   },
