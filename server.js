@@ -16,6 +16,7 @@ const w = require('./lib/util/w')
 const errorHandler = require('./lib/util/error-handler')
 const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
+const mobileRouter = require('./lib/mobile/routes')
 const {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
 const {checkToken} = require('./lib/auth')
 const {parseFromTo} = require('./lib/dates')
@@ -27,7 +28,7 @@ const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',
 async function main() {
   await mongo.connect()
   await cache.load()
-  require('./lib/util/passport').config()
+  require('./lib/util/passport').openidconnectConfig()
 
   const app = express()
 
@@ -169,6 +170,8 @@ async function main() {
     successRedirect: '/api/me',
     failureRedirect: '/'
   }))
+
+  app.use('/api/mobile/v1', mobileRouter())
 
   app.get('/api/me', (req, res) => {
     if (!req.user) {
