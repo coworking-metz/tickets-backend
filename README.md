@@ -13,7 +13,7 @@ your local machine for development and testing purposes.
 Requirements for the software and other tools to build, test and push
 
 - [Git](https://git-scm.com/) - Version control system
-- [Docker](https://www.docker.com/) - Container platform
+- [NodeJS](https://nodejs.org/) - Cross-platform JavaScript runtime environment
 - [yarn](https://yarnpkg.com/) - Package manager
 
 ### Install
@@ -34,13 +34,14 @@ cp .env.sample .env
 
 ### Initialize database with an archive
 
-Start the database through Docker prior importing the archive:
+You can either have a MongoDB process already running or
+start a new one through Docker prior importing the archive:
 ```bash
 docker-compose up -d
 ```
 
 ```bash
-docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --username user --password password --nsInclude="tickets.*" --archive < /Users/whatever/2023-09-01-12-00-01-mongo-tickets.mongoarchive
+docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude="tickets.*" --archive < /Users/whatever/2023-09-01-12-00-01-mongo-tickets.mongoarchive
 ```
 
 ### Start the project
