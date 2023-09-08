@@ -46,7 +46,7 @@ docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --username user --p
 ### Start the project
 
 ```bash
-yarn dev
+yarn start
 ```
 
 ## License

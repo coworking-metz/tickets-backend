@@ -4,7 +4,6 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "PORT=8000 yarn start",
     "start": "node server",
     "lint": "xo"
   },
