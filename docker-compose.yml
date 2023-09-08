@@ -1,0 +1,15 @@
+version: '3.8'
+name: tickets-backend
+services:
+  mongodb:
+    container_name: tickets-backend-mongodb
+    image: mongo:5.0.14
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_DATABASE=tickets
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
