@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 require('dotenv').config()
 
-const crypto = require('crypto')
+const crypto = require('node:crypto')
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
@@ -11,7 +11,6 @@ const {add} = require('date-fns')
 const MongoStore = require('connect-mongo')
 const passport = require('passport')
 const got = require('got')
-
 const mongo = require('./lib/util/mongo')
 const w = require('./lib/util/w')
 const errorHandler = require('./lib/util/error-handler')
@@ -19,7 +18,6 @@ const cache = require('./lib/cache')
 const netatmo = require('./lib/netatmo')
 const {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} = require('./lib/api')
 const {checkToken} = require('./lib/auth')
-
 const {parseFromTo} = require('./lib/dates')
 const {computeIncomes} = require('./lib/models')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')

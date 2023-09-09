@@ -28,7 +28,7 @@
     "passport-openidconnect": "^0.0.2"
   },
   "devDependencies": {
-    "xo": "^0.48.0"
+    "xo": "^0.56.0"
   },
   "xo": {
     "semicolon": false,
@@ -43,7 +43,8 @@
       "unicorn/import-style": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prefer-code-point": "off",
-      "node/prefer-global/process": "off"
+      "unicorn/prefer-top-level-await": "warn",
+      "n/prefer-global/process": "off"
     }
   }
 }
