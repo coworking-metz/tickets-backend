@@ -43,6 +43,7 @@
       "unicorn/import-style": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prefer-code-point": "off",
+      "unicorn/prefer-top-level-await": "warn",
       "n/prefer-global/process": "off"
     }
   }
