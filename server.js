@@ -21,6 +21,7 @@ const {checkToken} = require('./lib/auth')
 const {parseFromTo} = require('./lib/dates')
 const {computeIncomes} = require('./lib/models')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
+const {connexion, checkSession, deleteSession} = require('./lib/connexion')
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -121,6 +122,14 @@ async function main() {
     const stations = await netatmo.getStations()
     res.send(stations)
   }))
+
+  /**
+   * @apiDefine cowo Cowo APi
+   * Endpoints for managing all coworking related data (login, sessions, etc.)
+   */
+  app.post('/api/connexion', express.json(), checkToken(adminTokens), connexion)
+  app.post('/api/session', express.json(), checkToken(adminTokens), checkSession)
+  app.delete('/api/session', express.json(), checkToken(adminTokens), deleteSession)
 
   app.get('/coworkersNow', w(coworkersNow))
   app.post('/coworkersNow', w(coworkersNow))

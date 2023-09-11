@@ -16,7 +16,7 @@
     "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "express-session": "^1.17.2",
+    "express-session": "^1.17.3",
     "fs-extra": "^10.0.1",
     "got": "^11.8.3",
     "http-errors": "^2.0.0",
