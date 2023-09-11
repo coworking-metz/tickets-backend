@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
+    "dev": "node server",
+    "dev-nodemon": "nodemon server",
     "lint": "xo"
   },
   "dependencies": {
