@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "f407ffed-88a0-42e4-8b2b-20ca0f19c570",
+		"name": "tickets-backend",
+		"description": "A list of endpoints from tickets-backend API and how to consume them",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28955553"
+	},
+	"item": [
+		{
+			"name": "mobile",
+			"item": [
+				{
+					"name": "Get access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function grabAccessTokenOrRedirect(response) {",
+									"    const locationHeader = response.headers.find((header) => header.key === 'Location');",
+									"    const redirectUri = (locationHeader || {}).value",
+									"    if (redirectUri) {",
+									"        console.log({redirectUri})",
+									"        if (redirectUri.includes('accessToken')) {",
+									"            const queryParams = redirectUri.split('?')[1]",
+									"            const eachQueryParams = queryParams.split('&')",
+									"            eachQueryParams.forEach((queryParam) => {",
+									"                const [key, value] = queryParam.split('=');",
+									"                if (key === 'accessToken' && value) {",
+									"                    pm.collectionVariables.set(\"jwtAccessToken\", value);",
+									"                    console.log('jwtAccessToken set!', value)",
+									"                }",
+									"            })",
+									"        } else {",
+									"            pm.sendRequest(redirectUri, (error, response) => {",
+									"                if (error) {",
+									"                    console.error(error)",
+									"                } else {",
+									"                    grabAccessTokenOrRedirect(response)",
+									"                }",
+									"            })",
+									"        }",
+									"    }",
+									"}",
+									"",
+									"grabAccessTokenOrRedirect(pm.response)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/v1/auth/login?redirect=http://localhost:8001/wordpress/oauth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "redirect",
+									"value": "http://localhost:8001/wordpress/oauth/me",
+									"description": "Where to go once fully authenticated"
+								}
+							]
+						},
+						"description": "Retrieve an access token by following the redirects"
+					},
+					"response": []
+				},
+				{
+					"name": "User profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/v1/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open parking gate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/v1/gates/parking/open",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"gates",
+								"parking",
+								"open"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Every endpoint consumed by the mobile application",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwtAccessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "jwtAccessToken",
+			"value": ""
+		}
+	]
+}
