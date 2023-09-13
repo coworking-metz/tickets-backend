@@ -10,6 +10,14 @@ services:
       - MONGO_INITDB_DATABASE=tickets
     volumes:
       - mongodb_data:/data/db
+  mockoon:
+    container_name: tickets-backend-mockoon
+    image: mockoon/cli:4.1.0
+    entrypoint: "mockoon-cli start -d /mock.json -l 0.0.0.0 --daemon-off"
+    ports:
+      - 8001:8001
+    volumes:
+      - './mock/mockoon.json:/mock.json'
 
 volumes:
   mongodb_data:

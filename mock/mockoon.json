@@ -1,0 +1,400 @@
+{
+  "uuid": "2c2f5989-ae7d-46fc-a3ae-68aef584a0dd",
+  "lastMigration": 28,
+  "name": "tickets-backend external services",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 8001,
+  "hostname": "",
+  "folders": [
+    {
+      "uuid": "c5913c90-db3e-43e1-bedc-b1b13e11d7c6",
+      "name": "Home Assistant",
+      "collapsed": false,
+      "children": [
+        {
+          "type": "route",
+          "uuid": "1618e365-d94c-4537-8954-14a0aec85c75"
+        }
+      ]
+    },
+    {
+      "uuid": "04bc67d1-fb35-4253-b634-73fa1f072459",
+      "name": "ESP32 parking remote",
+      "collapsed": false,
+      "children": [
+        {
+          "type": "route",
+          "uuid": "6598b2e2-3e3a-47da-a656-7ec294a3245f"
+        }
+      ]
+    },
+    {
+      "uuid": "d64fe51d-73d3-4573-8fa6-0fb74bd6789a",
+      "name": "Wordpress",
+      "collapsed": false,
+      "children": [
+        {
+          "type": "route",
+          "uuid": "052ce13d-70c6-4a45-839c-218fd6494891"
+        },
+        {
+          "type": "route",
+          "uuid": "d7f4f09a-444a-4437-b598-a8ea31be89ea"
+        },
+        {
+          "type": "route",
+          "uuid": "71b6396f-acef-48f4-9121-874a60fb04f6"
+        },
+        {
+          "type": "route",
+          "uuid": "b85daac6-4eb8-474b-accb-9ab4325e89dc"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "uuid": "1618e365-d94c-4537-8954-14a0aec85c75",
+      "type": "http",
+      "documentation": "Sensor history",
+      "method": "get",
+      "endpoint": "home-assistant/api/history/period/:period?",
+      "responses": [
+        {
+          "uuid": "7621c665-18d3-4d9f-992c-a77eb0c8f00c",
+          "body": "[\n  [\n    {{setVar 'today' (dateFormat (now) 'yyyy-MM-dd') }}\n    {{#repeat (subtract (dateFormat (now) 'HH') 7) }}\n      {{setVar 'timelineHour' (dateTimeShift date=@today hours=(add @index 7)) }}\n      {{setVar 'stateByHour' (add 500 (multiply @index 100)) }}\n      {{#repeat 6 }}\n        {{setVar 'timelineHourMinute' (dateTimeShift date=@timelineHour minutes=(multiply @index 10)) }}\n        {{setVar 'state' (add @stateByHour (multiply @index 15)) }}\n        {\n          \"entity_id\": \"{{ queryParam 'filter_entity_id' }}\",\n          \"state\": \"{{ @state }}\",\n          \"attributes\": {\n            \"state_class\": \"measurement\",\n            \"unit_of_measurement\": \"ppm\",\n            \"device_class\": \"carbon_dioxide\",\n            \"friendly_name\": \"Intérieur CO2\"\n          },\n          \"last_changed\": \"{{ @timelineHourMinute }}\",\n          \"last_updated\": \"{{ @timelineHourMinute }}\"\n        }\n      {{/repeat}}\n    {{/repeat}}\n  ]\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "sensor.interieur_co2",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "filter_entity_id",
+              "value": "sensor.interieur_co2",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "af5bd8b0-a91e-4f08-8339-0f5453f80a8e",
+          "body": "[\n  [\n    {{setVar 'today' (dateFormat (now) 'yyyy-MM-dd') }}\n    {{#repeat (subtract (dateFormat (now) 'HH') 7) }}\n      {{setVar 'timelineHour' (dateTimeShift date=@today hours=(add @index 7)) }}\n      {{setVar 'stateByHour' (add 30 (multiply @index 1)) }}\n      {{#repeat 6 }}\n        {{setVar 'timelineHourMinute' (dateTimeShift date=@timelineHour minutes=(multiply @index 10)) }}\n        {{setVar 'state' (add @stateByHour (multiply @index 0.1)) }}\n        {\n          \"entity_id\": \"{{ queryParam 'filter_entity_id' }}\",\n          \"state\": \"{{ @state }}\",\n          \"attributes\": {\n            \"state_class\": \"measurement\",\n            \"unit_of_measurement\": \"dB\",\n            \"device_class\": \"sound_pressure\",\n            \"friendly_name\": \"Intérieur Noise\"\n          },\n          \"last_changed\": \"{{ @timelineHourMinute }}\",\n          \"last_updated\": \"{{ @timelineHourMinute }}\"\n        }\n      {{/repeat}}\n    {{/repeat}}\n  ]\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "sensor.interieur_noise",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "filter_entity_id",
+              "value": "sensor.interieur_noise",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "3a9a0116-741d-489f-9425-1342a3eecc83",
+          "body": "[\n  [\n    {{setVar 'today' (dateFormat (now) 'yyyy-MM-dd') }}\n    {{#repeat (subtract (dateFormat (now) 'HH') 7) }}\n      {{setVar 'timelineHour' (dateTimeShift date=@today hours=(add @index 7)) }}\n      {{setVar 'stateByHour' (add 24 (multiply @index 0.5)) }}\n      {{#repeat 6 }}\n        {{setVar 'timelineHourMinute' (dateTimeShift date=@timelineHour minutes=(multiply @index 10)) }}\n        {{setVar 'state' (add @stateByHour (multiply @index 0.1)) }}\n        {\n          \"entity_id\": \"{{ queryParam 'filter_entity_id' }}\",\n          \"state\": \"{{ @state }}\",\n          \"attributes\": {\n            \"state_class\": \"measurement\",\n            \"unit_of_measurement\": \"°C\",\n            \"device_class\": \"temperature\",\n            \"friendly_name\": \"Intérieur Temperature\"\n          },\n          \"last_changed\": \"{{ @timelineHourMinute }}\",\n          \"last_updated\": \"{{ @timelineHourMinute }}\"\n        }\n      {{/repeat}}\n    {{/repeat}}\n  ]\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "sensor.interieur_temperature",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "filter_entity_id",
+              "value": "sensor.interieur_temperature",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "1a346ba5-7c0f-4a66-8b13-673a3a0eb30f",
+          "body": "[\n  [\n    {{setVar 'today' (dateFormat (now) 'yyyy-MM-dd') }}\n    {{#repeat (subtract (dateFormat (now) 'HH') 7) }}\n      {{setVar 'timelineHour' (dateTimeShift date=@today hours=(add @index 7)) }}\n      {{#repeat 6 }}\n        {{setVar 'timelineHourMinute' (dateTimeShift date=@timelineHour minutes=(multiply @index 10)) }}\n        {\n          \"entity_id\": \"{{ queryParam 'filter_entity_id' }}\",\n          \"state\": \"{{ faker 'datatype.number' min=0 max=28 }}\",\n          \"attributes\": {\n            \"state_class\": \"measurement\",\n            \"unit_of_measurement\": \"%\",\n            \"device_class\": \"humidity\",\n            \"friendly_name\": \"Intérieur Humidity\"\n          },\n          \"last_changed\": \"{{ @timelineHourMinute }}\",\n          \"last_updated\": \"{{ @timelineHourMinute }}\"\n        }\n      {{/repeat}}\n    {{/repeat}}\n  ]\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "sensor.interieur_humidity",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "filter_entity_id",
+              "value": "sensor.interieur_humidity",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "99d0044a-3850-45cf-a1d1-4ad2bc9dcfe2",
+          "body": "{\"message\":\"filter_entity_id is missing\"}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "filter_entity_id is missing",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "6598b2e2-3e3a-47da-a656-7ec294a3245f",
+      "type": "http",
+      "documentation": "Press parking remote button",
+      "method": "post",
+      "endpoint": "esp32-parking-remote/button/gate_remote/press",
+      "responses": [
+        {
+          "uuid": "336e89b6-3b40-4000-a031-aaafa116ab49",
+          "body": "",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "d7f4f09a-444a-4437-b598-a8ea31be89ea",
+      "type": "http",
+      "documentation": "Redirect to /wordpress/login",
+      "method": "get",
+      "endpoint": "wordpress/oauth/authorize",
+      "responses": [
+        {
+          "uuid": "391fb097-ced4-4b49-a8f2-e7c55d468fb6",
+          "body": "",
+          "latency": 0,
+          "statusCode": 302,
+          "label": "",
+          "headers": [
+            {
+              "key": "Location",
+              "value": "{{baseUrl}}/wordpress/login?redirect_uri={{queryParam 'redirect_uri'}}"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "response_type",
+              "value": "code",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "71b6396f-acef-48f4-9121-874a60fb04f6",
+      "type": "http",
+      "documentation": "Return fake access_token and refresh_token",
+      "method": "post",
+      "endpoint": "wordpress/oauth/token",
+      "responses": [
+        {
+          "uuid": "0e64ca66-4d91-4a50-be0f-4e88d5e603db",
+          "body": "{\n  \"access_token\": \"fakeWordpressAccessToken\",\n  \"refresh_token\": \"fakeWordpressRefreshToken\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "b85daac6-4eb8-474b-accb-9ab4325e89dc",
+      "type": "http",
+      "documentation": "Return fake profile",
+      "method": "get",
+      "endpoint": "wordpress/oauth/me",
+      "responses": [
+        {
+          "uuid": "ffb3559b-318c-42ac-96ec-3f6fcbad86da",
+          "body": "{\n  {{setVar 'userEmail' (faker 'internet.email') }}\n  \"ID\": \"{{ faker 'datatype.number' min=1 max=800 }}\",\n  \"user_login\": \"{{ @userEmail }}\",\n  \"user_nicename\": \"{{ @userEmail }}\",\n  \"user_email\": \"{{ @userEmail }}\",\n  \"user_registered\": \"{{ now }}\",\n  \"user_status\": \"0\",\n  \"display_name\": \"{{ faker 'name.firstName' }}\",\n  \"user_roles\": [ \"administrator\" ]\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "052ce13d-70c6-4a45-839c-218fd6494891",
+      "type": "http",
+      "documentation": "Redirect to tickets-backed callback uri",
+      "method": "get",
+      "endpoint": "wordpress/login",
+      "responses": [
+        {
+          "uuid": "d1fc780e-9a2b-4857-bda5-ddc7ba2d8d17",
+          "body": "",
+          "latency": 0,
+          "statusCode": 302,
+          "label": "",
+          "headers": [
+            {
+              "key": "Location",
+              "value": "{{queryParam 'redirect_uri' }}&code=fakeAuthorizationCode"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "folder",
+      "uuid": "c5913c90-db3e-43e1-bedc-b1b13e11d7c6"
+    },
+    {
+      "type": "folder",
+      "uuid": "04bc67d1-fb35-4253-b634-73fa1f072459"
+    },
+    {
+      "type": "folder",
+      "uuid": "d64fe51d-73d3-4573-8fa6-0fb74bd6789a"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": []
+}
