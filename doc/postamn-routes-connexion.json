@@ -122,8 +122,8 @@
 						"type": "text"
 					},
 					{
-						"key": "SessionId",
-						"value": "{{session_id}}",
+						"key": "Token",
+						"value": "{{token}}",
 						"type": "text"
 					}
 				],
