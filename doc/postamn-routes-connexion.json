@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "bc51df44-fb94-4b66-bd05-610baf9461d4",
+		"name": "Tickets Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4064813",
+		"_collection_link": "https://sopress.postman.co/workspace/Coworking-Metz~4192dd6d-8558-4f46-981d-8f0dffa7dfe7/collection/4064813-bc51df44-fb94-4b66-bd05-610baf9461d4?action=share&source=collection_link&creator=4064813"
+	},
+	"item": [
+		{
+			"name": "Se connecter & obtenir un token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Valeur de session_id', function() {\r",
+							"\r",
+							"// Store the session_id in a variable\r",
+							"var token = pm.response.json().token;\r",
+							"\r",
+							"// Set the session_id as a variable to be used in other requests\r",
+							"pm.globals.set(\"token\", token);\r",
+							"\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{app_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"identifiant\":\"{{identifiant}}\",\r\n\"password\":\"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/api/connexion",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"connexion"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tester la validité d'un token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{app_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/api/session",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Terminer une session",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{app_token}}",
+						"type": "text"
+					},
+					{
+						"key": "SessionId",
+						"value": "{{session_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/api/session",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"session"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
