@@ -21,6 +21,7 @@ const {checkToken} = require('./lib/auth')
 const {parseFromTo} = require('./lib/dates')
 const {computeIncomes} = require('./lib/models')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
+const {ping} = require('./lib/ping')
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -122,6 +123,7 @@ async function main() {
     res.send(stations)
   }))
 
+  app.get('/api/ping', w(ping))
   app.get('/coworkersNow', w(coworkersNow))
   app.post('/coworkersNow', w(coworkersNow))
 
