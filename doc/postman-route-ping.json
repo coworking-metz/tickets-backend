@@ -1,0 +1,29 @@
+{
+	"info": {
+		"_postman_id": "49bf1c01-1511-4e05-b912-48216366a249",
+		"name": "Tickets Backend - Ping",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4064813",
+		"_collection_link": "https://sopress.postman.co/workspace/Coworking-Metz~4192dd6d-8558-4f46-981d-8f0dffa7dfe7/collection/4064813-49bf1c01-1511-4e05-b912-48216366a249?action=share&source=collection_link&creator=4064813"
+	},
+	"item": [
+		{
+			"name": "{{api_url}}/api/ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/api/ping",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
