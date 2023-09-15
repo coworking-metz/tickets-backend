@@ -8,7 +8,7 @@ each period a coworker is physically present in the open space.
 These instructions will give you a copy of the project up and running on
 your local machine for development and testing purposes.
 
-### API Testing
+### API Testing with Postman
 
 1. **Open Postman**: Launch the Postman application.
 
