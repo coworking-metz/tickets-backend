@@ -10,7 +10,9 @@ your local machine for development and testing purposes.
 
 ### API Testing with Postman
 
-1. **Open Postman**: Launch the Postman application.
+There are files in the /doc/ folder that can be used in the Postman app to test and debug the API.
+
+1. **Open Postman**: Launch the Postman application (or https://www.postman.com/).
 
 2. **Import Option**: Click on the "File" menu, then select "Import..." or use the "Import" button usually found on the left upper corner.
 
