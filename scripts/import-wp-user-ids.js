@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 /* eslint no-await-in-loop: off */
-require('dotenv').config()
+import 'dotenv/config.js'
 
-const mongo = require('../lib/util/mongo')
-const {getUserIdByWpUserId, getUserIdByEmail} = require('../lib/models')
-const wpUsers = require('../wp-users.json')
+import {readFile} from 'node:fs/promises'
+
+import mongo from '../lib/util/mongo.js'
+import {getUserIdByWpUserId, getUserIdByEmail} from '../lib/models.js'
+
+const wpUsers = JSON.parse(await readFile('./wp-users.json', {encoding: 'utf8'}))
 
 async function importWpUserId(wpUser) {
   if (!wpUser.ID || !wpUser.user_email) {
@@ -32,18 +35,11 @@ async function importWpUserId(wpUser) {
   }
 }
 
-async function main() {
-  await mongo.connect()
+await mongo.connect()
 
-  for (const wpUser of wpUsers) {
-    await importWpUserId(wpUser)
-  }
-
-  console.log('Completed!')
-  await mongo.disconnect()
+for (const wpUser of wpUsers) {
+  await importWpUserId(wpUser)
 }
 
-main().catch(error => {
-  console.error(error)
-  process.exit(1)
-})
+console.log('Completed!')
+await mongo.disconnect()
