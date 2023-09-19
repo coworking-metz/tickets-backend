@@ -47,7 +47,7 @@
       "unicorn/no-array-callback-reference": "off",
       "unicorn/prefer-code-point": "off",
       "import/no-unassigned-import": "off",
-      "import/order": "off",
+      "import/order": "off"
     }
   }
 }
