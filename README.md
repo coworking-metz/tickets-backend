@@ -13,7 +13,7 @@ your local machine for development and testing purposes.
 Requirements for the software and other tools to build, test and push
 
 - [Git](https://git-scm.com/) - Version control system
-- [NodeJS](https://nodejs.org/) - Cross-platform JavaScript runtime environment
+- [NodeJS](https://nodejs.org/) 18.12+ - Cross-platform JavaScript runtime environment
 - [yarn](https://yarnpkg.com/) - Package manager
 
 ### Install
