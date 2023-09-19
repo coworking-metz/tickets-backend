@@ -52,5 +52,8 @@
       "unicorn/prefer-top-level-await": "warn",
       "n/prefer-global/process": "off"
     }
+  },
+  "engines": {
+    "node": ">=18.12"
   }
 }
