@@ -42,15 +42,10 @@
     "rules": {
       "camelcase": "off",
       "comma-dangle": "off",
-      "import/extensions": "off",
       "unicorn/no-array-reduce": "off",
       "unicorn/prevent-abbreviations": "off",
       "unicorn/no-array-callback-reference": "off",
-      "unicorn/import-style": "off",
-      "unicorn/prefer-module": "off",
-      "unicorn/prefer-code-point": "off",
-      "unicorn/prefer-top-level-await": "warn",
-      "n/prefer-global/process": "off"
+      "unicorn/prefer-code-point": "off"
     }
   }
 }
