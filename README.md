@@ -50,6 +50,12 @@ docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude="ticket
 yarn start
 ```
 
+Or if you want some live-reload:
+
+```bash
+yarn dev
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
