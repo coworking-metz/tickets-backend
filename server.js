@@ -21,6 +21,7 @@ const {checkToken} = require('./lib/auth')
 const {parseFromTo} = require('./lib/dates')
 const {computeIncomes} = require('./lib/models')
 const {computeStats, computePeriodsStats, asCsv} = require('./lib/stats')
+const {ping} = require('./lib/ping')
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -186,6 +187,8 @@ async function main() {
     await got.post(process.env.INTERPHONE_URL)
     res.status(202).send({message: 'Ouverture du portail demandée'})
   }))
+
+  app.get('/api/ping', w(ping))
 
   app.use(errorHandler)
 
