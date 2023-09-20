@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
@@ -17,10 +18,9 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
-    "fs-extra": "^10.0.1",
     "got": "^11.8.3",
     "http-errors": "^2.0.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "mongodb": "^4.5.0",
     "morgan": "^1.10.0",
     "netatmo": "^2.4.0",
@@ -42,15 +42,12 @@
     "rules": {
       "camelcase": "off",
       "comma-dangle": "off",
-      "import/extensions": "off",
       "unicorn/no-array-reduce": "off",
       "unicorn/prevent-abbreviations": "off",
       "unicorn/no-array-callback-reference": "off",
-      "unicorn/import-style": "off",
-      "unicorn/prefer-module": "off",
       "unicorn/prefer-code-point": "off",
-      "unicorn/prefer-top-level-await": "warn",
-      "n/prefer-global/process": "off"
+      "import/no-unassigned-import": "off",
+      "import/order": "off"
     }
   },
   "engines": {

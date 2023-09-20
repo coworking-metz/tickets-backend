@@ -1,24 +1,17 @@
 #!/usr/bin/env node
-require('dotenv').config()
+import 'dotenv/config.js'
 
-const mongo = require('../lib/util/mongo')
-const {updateBalance} = require('../lib/models')
+import mongo from '../lib/util/mongo.js'
+import {updateBalance} from '../lib/models.js'
 
-async function main() {
-  await mongo.connect()
-  const userIds = await mongo.db.collection('users').distinct('_id')
+await mongo.connect()
+const userIds = await mongo.db.collection('users').distinct('_id')
 
-  for (const userId of userIds) {
-    /* eslint-disable-next-line no-await-in-loop */
-    const balance = await updateBalance(userId)
-    console.log(`${userId} : ${balance}`)
-  }
-
-  console.log('Completed!')
-  await mongo.disconnect()
+for (const userId of userIds) {
+  /* eslint-disable-next-line no-await-in-loop */
+  const balance = await updateBalance(userId)
+  console.log(`${userId} : ${balance}`)
 }
 
-main().catch(error => {
-  console.error(error)
-  process.exit(1)
-})
+console.log('Completed!')
+await mongo.disconnect()

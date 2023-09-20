@@ -1,24 +1,17 @@
 #!/usr/bin/env node
-require('dotenv').config()
+import 'dotenv/config.js'
 
-const mongo = require('../lib/util/mongo')
-const {syncUser} = require('../lib/models')
+import mongo from '../lib/util/mongo.js'
+import {syncUser} from '../lib/models.js'
 
-async function main() {
-  await mongo.connect()
-  const userIds = await mongo.db.collection('users').distinct('_id', {wpUserId: {$ne: null}})
+await mongo.connect()
+const userIds = await mongo.db.collection('users').distinct('_id', {wpUserId: {$ne: null}})
 
-  for (const userId of userIds) {
-    /* eslint-disable-next-line no-await-in-loop */
-    await syncUser(userId)
-    console.log(`${userId} synchronized`)
-  }
-
-  console.log('Completed!')
-  await mongo.disconnect()
+for (const userId of userIds) {
+  /* eslint-disable-next-line no-await-in-loop */
+  await syncUser(userId)
+  console.log(`${userId} synchronized`)
 }
 
-main().catch(error => {
-  console.error(error)
-  process.exit(1)
-})
+console.log('Completed!')
+await mongo.disconnect()
