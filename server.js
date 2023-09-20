@@ -26,6 +26,7 @@ import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {config as configPassport} from './lib/util/passport.js'
+import {pressRemoteButton} from './lib/services/esp32-parking-remote.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -189,6 +190,16 @@ app.get('/api/token', checkToken(adminTokens), (req, res) => {
 app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
   await got.post(process.env.INTERPHONE_URL)
   res.status(202).send({message: 'Ouverture du portail demandée'})
+}))
+
+app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
+  await pressRemoteButton()
+  const now = new Date()
+  res.send({
+    triggered: now.toISOString(),
+    closed: add(now, {seconds: 60}).toISOString(),
+    timeout: 'PT60S' // Didn't count yet but I suspect a 60 seconds period
+  })
 }))
 
 app.get('/api/ping', w(ping))
