@@ -25,7 +25,7 @@ import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
-import {config as configPassport, oauth2Config as passportOauth2Config} from './lib/util/passport.js'
+import {config as configPassport} from './lib/util/passport.js'
 import {pressRemoteButton} from './lib/services/esp32-parking-remote.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
@@ -33,7 +33,6 @@ const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',
 await mongo.connect()
 await cache.load()
 await configPassport()
-await passportOauth2Config()
 
 const app = express()
 
