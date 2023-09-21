@@ -3,7 +3,7 @@ name: tickets-backend
 services:
   mongodb:
     container_name: tickets-backend-mongodb
-    image: mongo:5.0.14
+    image: mongo:5.0.21
     ports:
       - '27017:27017'
     environment:
