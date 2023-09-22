@@ -20,7 +20,7 @@ import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
 import netatmo from './lib/netatmo.js'
 import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
-import {checkToken} from './lib/auth.js'
+import {checkToken, oauth2Callback, oauth2Login} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
@@ -203,6 +203,9 @@ app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
 }))
 
 app.get('/api/ping', w(ping))
+
+app.get('/api/oauth/login', w(oauth2Login))
+app.get('/api/oauth/callback', w(oauth2Callback))
 
 app.use(errorHandler)
 
