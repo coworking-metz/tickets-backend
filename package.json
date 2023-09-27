@@ -13,6 +13,7 @@
   "dependencies": {
     "bluebird": "^3.7.2",
     "connect-mongo": "^5.0.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
@@ -20,6 +21,7 @@
     "express-session": "^1.17.3",
     "got": "^13.0.0",
     "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "lodash-es": "^4.17.21",
     "mongodb": "^4.17.1",
     "morgan": "^1.10.0",
