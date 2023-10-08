@@ -18,7 +18,6 @@ import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
-import netatmo from './lib/netatmo.js'
 import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {checkToken} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
@@ -27,6 +26,11 @@ import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {config as configPassport} from './lib/util/passport.js'
 import {pressRemoteButton} from './lib/services/esp32-parking-remote.js'
+import {
+  isEnabled as netatmoIsEnabled,
+  startNetatmoRefreshTokenLoop,
+  getStations
+} from './lib/services/netatmo.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -118,15 +122,6 @@ app.get('/stats/incomes/:periodType', w(async (req, res) => {
   res.send(stats)
 }))
 
-app.get('/netatmo/stations', w(async (req, res) => {
-  if (!netatmo.isAvailable()) {
-    return res.status(500).send({code: 500, message: 'Non disponible. Netatmo n’est pas configuré.'})
-  }
-
-  const stations = await netatmo.getStations()
-  res.send(stations)
-}))
-
 app.get('/coworkersNow', w(coworkersNow))
 app.post('/coworkersNow', w(coworkersNow))
 
@@ -203,6 +198,19 @@ app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
 }))
 
 app.get('/api/ping', w(ping))
+
+if (netatmoIsEnabled()) {
+  startNetatmoRefreshTokenLoop()
+
+  app.get('/netatmo/stations', w(async (req, res) => {
+    if (!netatmoIsEnabled()) {
+      return res.status(500).send({code: 500, message: 'Non disponible. Netatmo n’est pas configuré.'})
+    }
+
+    const stations = await getStations()
+    res.send(stations)
+  }))
+}
 
 app.use(errorHandler)
 
