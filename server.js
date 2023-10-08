@@ -203,10 +203,6 @@ if (netatmoIsEnabled()) {
   startNetatmoRefreshTokenLoop()
 
   app.get('/netatmo/stations', w(async (req, res) => {
-    if (!netatmoIsEnabled()) {
-      return res.status(500).send({code: 500, message: 'Non disponible. Netatmo n’est pas configuré.'})
-    }
-
     const stations = await getStations()
     res.send(stations)
   }))
