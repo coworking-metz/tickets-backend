@@ -48,7 +48,7 @@ docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude="ticket
 
 To use Netatmo features you have to define `NETATMO_CLIENT_ID`, `NETATMO_CLIENT_SECRET` and `NETATMO_ENABLED=1` in your environment (basically you can edit your `.env` file).
 
-You also need to initialize your configuration with an new refresh token generated from [Netatmo dev dashboard](https://dev.netatmo.com/apps).
+You also need to initialize your configuration with an new refresh token generated from [Netatmo dev dashboard](https://dev.netatmo.com/apps). The token must have `read_station` scope.
 
 :warning: You MUST NOT re-use a refresh token from the production environment since you WILL break the production.
 
