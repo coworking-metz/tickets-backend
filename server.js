@@ -8,9 +8,7 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import Papa from 'papaparse'
-import session from 'express-session'
 import {add} from 'date-fns'
-import MongoStore from 'connect-mongo'
 import got from 'got'
 
 import mongo from './lib/util/mongo.js'
@@ -39,17 +37,6 @@ const app = express()
 
 app.use(cors({origin: true}))
 
-const sessionOptions = {
-  cookie: {
-    expires: add(new Date(), {days: 14}),
-    httpOnly: false
-  },
-  resave: false,
-  saveUninitialized: false,
-  secret: process.env.SESSION_SECRET,
-  store: MongoStore.create({client: mongo.client})
-}
-
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1)
 }
@@ -57,8 +44,6 @@ if (process.env.NODE_ENV === 'production') {
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
-
-app.use(session(sessionOptions))
 
 app.get('/stats', w(async (req, res) => {
   const stats = await computeStats()
