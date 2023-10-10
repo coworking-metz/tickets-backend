@@ -8,10 +8,7 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import Papa from 'papaparse'
-import session from 'express-session'
 import {add} from 'date-fns'
-import MongoStore from 'connect-mongo'
-import passport from 'passport'
 import got from 'got'
 
 import mongo from './lib/util/mongo.js'
@@ -24,7 +21,6 @@ import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
-import {config as configPassport} from './lib/util/passport.js'
 import {pressRemoteButton} from './lib/services/esp32-parking-remote.js'
 import {
   isEnabled as netatmoIsEnabled,
@@ -36,22 +32,10 @@ const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',
 
 await mongo.connect()
 await cache.load()
-await configPassport()
 
 const app = express()
 
 app.use(cors({origin: true}))
-
-const sessionOptions = {
-  cookie: {
-    expires: add(new Date(), {days: 14}),
-    httpOnly: false
-  },
-  resave: false,
-  saveUninitialized: false,
-  secret: process.env.SESSION_SECRET,
-  store: MongoStore.create({client: mongo.client})
-}
 
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1)
@@ -60,10 +44,6 @@ if (process.env.NODE_ENV === 'production') {
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
-
-app.use(session(sessionOptions))
-app.use(passport.initialize())
-app.use(passport.session())
 
 app.get('/stats', w(async (req, res) => {
   const stats = await computeStats()
@@ -163,20 +143,6 @@ const validateAndParseJson = express.json({
   }
 })
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
-
-app.get('/api/login', passport.authenticate('wordpress'))
-app.get('/api/login/return', passport.authenticate('wordpress', {
-  successRedirect: '/api/me',
-  failureRedirect: '/'
-}))
-
-app.get('/api/me', (req, res) => {
-  if (!req.user) {
-    return res.sendStatus(401)
-  }
-
-  res.send(req.user)
-})
 
 app.get('/api/token', checkToken(adminTokens), (req, res) => {
   res.send({status: 'ok'})
