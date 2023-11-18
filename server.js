@@ -15,7 +15,7 @@ import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
-import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
+import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {checkToken} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
@@ -142,7 +142,9 @@ const validateAndParseJson = express.json({
     }
   }
 })
+
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
+app.get('/api/sync-user-webhook', checkToken(adminTokens), w(syncUserWebhook))
 
 app.get('/api/token', checkToken(adminTokens), (req, res) => {
   res.send({status: 'ok'})
