@@ -144,7 +144,7 @@ const validateAndParseJson = express.json({
 })
 
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
-app.get('/api/sync-user-webhook', checkToken(adminTokens), w(syncUserWebhook))
+app.post('/api/sync-user-webhook', checkToken(adminTokens), w(syncUserWebhook))
 
 app.get('/api/token', checkToken(adminTokens), (req, res) => {
   res.send({status: 'ok'})
