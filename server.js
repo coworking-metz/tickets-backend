@@ -177,7 +177,7 @@ if (netatmoIsEnabled()) {
   }))
 }
 
-app.get('/api/open-space/sensors/co2', w(async (req, res) => {
+app.get('/api/open-space/sensors', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
 }))
