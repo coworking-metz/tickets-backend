@@ -27,6 +27,7 @@ import {
   startNetatmoRefreshTokenLoop,
   getStations
 } from './lib/services/netatmo.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo} from './lib/services/home-assistant.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -175,6 +176,11 @@ if (netatmoIsEnabled()) {
     res.send(stations)
   }))
 }
+
+app.get('/api/open-space/sensors', w(async (req, res) => {
+  const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
+  res.send(sensors)
+}))
 
 app.use(errorHandler)
 
