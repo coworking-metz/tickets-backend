@@ -22,11 +22,6 @@ import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/esp32-parking-remote.js'
-import {
-  isEnabled as netatmoIsEnabled,
-  startNetatmoRefreshTokenLoop,
-  getStations
-} from './lib/services/netatmo.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo} from './lib/services/home-assistant.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
@@ -168,16 +163,8 @@ app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
 
 app.get('/api/ping', w(ping))
 
-if (netatmoIsEnabled()) {
-  startNetatmoRefreshTokenLoop()
-
-  app.get('/netatmo/stations', w(async (req, res) => {
-    const stations = await getStations()
-    res.send(stations)
-  }))
-}
-
-app.get('/api/open-space/sensors', w(async (req, res) => {
+// Replace Netatmo by Home Assistant
+app.get('/netatmo/stations', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
 }))
