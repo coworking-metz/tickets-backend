@@ -62,7 +62,7 @@ node scripts/netatmo-authenticate.js "your-refresh-token"
 
 ### Set up parking remote (Shelly)
 
-To enable parking remote feature, you must define `SHELLY_TOKEN` (authentication key from your Shelly Cloud or Shelly local account), `SHELLY_SERVER` (URL to Shelly Cloud server or your local device) and `SHELLY_PARKING_REMOTE_DEVICE` (device id) in your environment. We assume output everything is already configured and output is on channel 0.
+To enable parking remote feature, you must define `SHELLY_TOKEN` (authentication key from your Shelly Cloud or Shelly local account), `SHELLY_SERVER` (URL to Shelly Cloud server or your local device) and `SHELLY_PARKING_REMOTE_DEVICE` (device id) in your environment. We assume everything is already configured and output is on channel 0.
 
 :warning: When you change your Shelly account password, your authentication key is refreshed.
 
