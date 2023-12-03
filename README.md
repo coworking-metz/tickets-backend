@@ -66,6 +66,12 @@ To enable parking remote feature, you must define `SHELLY_TOKEN` (authentication
 
 :warning: When you change your Shelly account password, your authentication key is refreshed.
 
+### Set up Home Assistant
+
+In order to contact [Home Assistant](https://github.com/coworking-metz/infrastructure/tree/main/home-assistant), you have to define the following environment variables:
+- `HOME_ASSISTANT_BASE_URL`: reachable url of the Home Assistant server (like `http://homeassitant.local:8123`). Trailing slash don't matter.
+- `HOME_ASSISTANT_LONG_LIVED_TOKEN`: [Long Lived Token](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token) of the Home Assistant account used to retrieve data. You can easily create a new one from the profile page http://homeassitant.local:8123/profile.
+
 ### Start the project
 
 ```bash
