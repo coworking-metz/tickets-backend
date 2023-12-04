@@ -72,6 +72,11 @@ In order to contact [Home Assistant](https://github.com/coworking-metz/infrastru
 - `HOME_ASSISTANT_BASE_URL`: reachable url of the Home Assistant server (like `http://homeassitant.local:8123`). Trailing slash doesn't matter.
 - `HOME_ASSISTANT_LONG_LIVED_TOKEN`: [Long Lived Token](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token) of the Home Assistant account used to retrieve data. You can easily create a new one from the profile page http://homeassitant.local:8123/profile.
 
+To find the `entity_id` of the entity you want to control, go to http://homeassistant.local:8123/developer-tools/state and look at for the left column named `Entity`.
+
+> **Warning**
+> Home Assistant is only reachable in the local network at the moment.
+
 ### Start the project
 
 ```bash
