@@ -150,8 +150,8 @@ app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
   const now = new Date()
   res.send({
     triggered: now.toISOString(),
-    locked: add(now, {seconds: 5}).toISOString(),
-    timeout: 'PT5S'
+    locked: add(now, {seconds: 3}).toISOString(),
+    timeout: 'PT3S'
   })
 }))
 
