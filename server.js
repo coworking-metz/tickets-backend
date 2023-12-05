@@ -9,7 +9,6 @@ import cors from 'cors'
 import morgan from 'morgan'
 import Papa from 'papaparse'
 import {add} from 'date-fns'
-import got from 'got'
 
 import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
@@ -22,7 +21,7 @@ import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo} from './lib/services/home-assistant.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -147,8 +146,13 @@ app.get('/api/token', checkToken(adminTokens), (req, res) => {
 })
 
 app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
-  await got.post(process.env.INTERPHONE_URL)
-  res.status(202).send({message: 'Ouverture du portail demandée'})
+  await pressIntercomButton()
+  const now = new Date()
+  res.send({
+    triggered: now.toISOString(),
+    locked: add(now, {seconds: 3}).toISOString(),
+    timeout: 'PT3S'
+  })
 }))
 
 app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
