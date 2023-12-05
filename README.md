@@ -44,22 +44,6 @@ docker-compose up -d
 docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude="tickets.*" --archive < /Users/whatever/2023-09-01-12-00-01-mongo-tickets.mongoarchive
 ```
 
-### Set up Netatmo
-
-To use Netatmo features you have to define `NETATMO_CLIENT_ID`, `NETATMO_CLIENT_SECRET` and `NETATMO_ENABLED=1` in your environment (basically you can edit your `.env` file).
-
-You also need to initialize your configuration with an new refresh token generated from [Netatmo dev dashboard](https://dev.netatmo.com/apps). The token must have `read_station` scope.
-
-:warning: You MUST NOT re-use a refresh token from the production environment since you WILL break the production.
-
-```bash
-node scripts/netatmo-authenticate.js "your-refresh-token"
-
-> Authentication successful
-```
-
-*Double quotes are required since Netatmo tokens contain the | (pipe) character.*
-
 ### Set up parking remote (Shelly)
 
 To enable parking remote feature, you must define `SHELLY_TOKEN` (authentication key from your Shelly Cloud or Shelly local account), `SHELLY_SERVER` (URL to Shelly Cloud server or your local device) and `SHELLY_PARKING_REMOTE_DEVICE` (device id) in your environment. We assume everything is already configured and output is on channel 0.
