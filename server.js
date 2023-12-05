@@ -167,7 +167,6 @@ app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
 
 app.get('/api/ping', w(ping))
 
-// Replace Netatmo by Home Assistant
 app.get('/netatmo/stations', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
