@@ -64,7 +64,7 @@ To find the `entity_id` of the entity you want to control, go to http://homeassi
 ### Set up Auth
 
 User identification is processed by WordPress server located on https://www.coworking-metz.fr/ through OAuth2.
-Once the user has been authenticated by WordPress, `tickets-backend` add another layer based on internal business logic (balance, active subscription, membership).
+Once the user has been authenticated by WordPress, `tickets-backend` adds another layer based on internal business logic (balance, active subscription, membership).
 This results to a JWT authentification containing basic user information and access.
 
 To learn how to consume JWT authentication, check out [AUTH.md](./AUTH.md).
