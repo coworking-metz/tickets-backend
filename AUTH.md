@@ -1,33 +1,32 @@
 # Authentication
 
 How to retrieve a refresh token:
-- Foward users to `tickets-backend/auth/login`,
+- Foward users to `tickets-backend/api/auth/login`,
 - Users will authenticate themself on `https://www.coworking-metz.fr/`,
 - If authorized, users will be redirected to the origin
 with `accessToken` and `refreshToken` as query parameters.
 
-
 By default, `tickets-backend` will set the origin url to the `Referer` request header
-when forwarding users to `tickets-backend/auth/login`.
+when forwarding users to `tickets-backend/api/auth/login`.
 It can be overriden by setting the `follow` query parameter.
 
 Some examples:
-- when users navigate to `tickets-backend/auth/login` from `http://your-app.local`, they will redirected to `http://localhost:5173` if `http://localhost:5173` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/auth/callback` with an error message.
-- when users navigate to `tickets-backend/auth/login?follow=http://example.com` from `http://localhost:5173`, they will redirected to `http://example.com` if `http://example.com` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/auth/callback` with an error message.
+- when users navigate to `tickets-backend/api/auth/login` from `http://your-app.local`, they will redirected to `http://localhost:5173` if `http://localhost:5173` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/api/auth/callback` with an error message.
+- when users navigate to `tickets-backend/api/auth/login?follow=http://example.com` from `http://localhost:5173`, they will redirected to `http://example.com` if `http://example.com` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/api/auth/callback` with an error message.
 
 Here is a sequence diagram on how it works behind the scene:
 ```mermaid
 sequenceDiagram
-    User->>App: click on login
-    App-->>User: forward to tickets-backend/auth/login
-    User->>tickets-backend: GET /auth/login
+    User->>app: click on login
+    app-->>User: forward to tickets-backend/api/auth/login
+    User->>tickets-backend: GET /api/auth/login
     tickets-backend-->>User: redirect to wordpress/oauth/authorize?redirect=tickets-backend
     User->>wordpress: GET /oauth/authorize?redirect=tickets-backend
     wordpress-->>User: redirect to /mon-compte
     User->>wordpress: POST /mon-compte { credentials }
     wordpress->>wordpress: check credentials
-    wordpress-->>User: redirect to tickets-backend/auth/callback?code
-    User->>tickets-backend: GET /auth/callback?code
+    wordpress-->>User: redirect to tickets-backend/api/auth/callback?code
+    User->>tickets-backend: GET /api/auth/callback?code
     tickets-backend->>wordpress: POST /oauth/token { code }
     wordpress-->>tickets-backend: { OAuthAccessToken, OAuthRefreshToken }
     tickets-backend->>wordpress: POST /oauth/me { OAuthAccessToken }
@@ -54,7 +53,7 @@ How it works behind the scene:
 sequenceDiagram
     User->>app: GET /?refreshToken
     app-->>app: check if refreshToken exists
-    app->>tickets-backend: POST /auth/token { refreshToken }
+    app->>tickets-backend: POST /api/auth/token { refreshToken }
     tickets-backend->>tickets-backend: decode OAuthRefreshToken from refreshToken
     tickets-backend->>wordpress: POST /oauth/token { OAuthRefreshToken }
     wordpress-->>tickets-backend: { OAuthAccessToken, OAuthRefreshToken }
