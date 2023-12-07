@@ -11,8 +11,8 @@ when forwarding users to `tickets-backend/api/auth/login`.
 It can be overriden by setting the `follow` query parameter.
 
 Some examples:
-- when users navigate to `tickets-backend/api/auth/login` from `http://your-app.local`, they will redirected to `http://localhost:5173` if `http://localhost:5173` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/api/auth/callback` with an error message.
-- when users navigate to `tickets-backend/api/auth/login?follow=http://example.com` from `http://localhost:5173`, they will redirected to `http://example.com` if `http://example.com` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/api/auth/callback` with an error message.
+- when users navigate to `tickets-backend/api/auth/login` from `http://your-app.local`, they will be redirected to `http://localhost:5173` if `http://localhost:5173` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/api/auth/callback` with an error message.
+- when users navigate to `tickets-backend/api/auth/login?follow=http://example.com` from `http://localhost:5173`, they will be redirected to `http://example.com` if `http://example.com` is included in `OAUTH_FOLLOW_WHITELIST` environement variable, otherwise to `tickets-backend/api/auth/callback` with an error message.
 
 Here is a sequence diagram on how it works behind the scene:
 ```mermaid
