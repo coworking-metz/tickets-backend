@@ -15,18 +15,20 @@ import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
 import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
-import {checkToken} from './lib/auth.js'
+import {checkToken, authRouter} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
+import {setupPassport} from './lib/util/passport.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
 await mongo.connect()
 await cache.load()
+setupPassport()
 
 const app = express()
 
@@ -171,6 +173,8 @@ app.get('/netatmo/stations', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
 }))
+
+app.use('/api/auth', authRouter())
 
 app.use(errorHandler)
 
