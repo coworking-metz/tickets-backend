@@ -25,6 +25,7 @@ import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
+import {retrieveUserFromAccessToken, isUserAdmin, managerRouter} from './lib/manager/routes.js'
 
 await mongo.connect()
 await cache.load()
@@ -147,6 +148,7 @@ app.get('/api/ping', w(ping))
 /* Auth */
 
 app.use('/api/auth', authRouter())
+app.use('/api/manager', w(retrieveUserFromAccessToken), w(isUserAdmin), managerRouter())
 
 app.use(errorHandler)
 
