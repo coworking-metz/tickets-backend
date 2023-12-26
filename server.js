@@ -23,7 +23,7 @@ import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 import {setupPassport} from './lib/util/passport.js'
-import {isUserAdmin, managerRouter} from './lib/manager/routes.js'
+import {isUserAdmin, managerRouter} from './lib/routes/manager.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
