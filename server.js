@@ -137,7 +137,11 @@ async function resolveUserUsingEmail(req, res, next) {
   next()
 }
 
+/* Public access */
+
 app.get('/coworkersNow', w(coworkersNow))
+
+/* General purpose */
 
 app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getUserStats))
 app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getUserStats))
@@ -150,14 +154,20 @@ app.get('/api/voting-coworkers', multiAuth, w(getVotingCoworkers))
 app.get('/api/users-stats', multiAuth, w(getUsersStats))
 app.get('/api/current-users', multiAuth, w(getCurrentUsers))
 
+/* Presences */
+
 app.post('/api/heartbeat', express.urlencoded({extended: false}), ensureToken, w(heartbeat))
 app.get('/api/mac', multiAuth, w(getMacAddresses))
 app.post('/api/mac', express.urlencoded({extended: false}), ensureToken, w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), ensureToken, w(updatePresence))
 app.post('/api/notify', express.urlencoded({extended: false}), ensureToken, w(notify))
 
+/* Webhooks */
+
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
 app.post('/api/sync-user-webhook', ensureToken, w(syncUserWebhook))
+
+/* Services */
 
 app.post('/api/interphone', multiAuth, w(async (req, res) => {
   await pressIntercomButton()
@@ -179,12 +189,16 @@ app.post('/api/parking', multiAuth, w(async (req, res) => {
   })
 }))
 
-app.get('/api/ping', w(ping))
-
 app.get('/netatmo/stations', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
 }))
+
+/* Util */
+
+app.get('/api/ping', w(ping))
+
+/* Auth */
 
 app.use('/api/auth', authRouter())
 
