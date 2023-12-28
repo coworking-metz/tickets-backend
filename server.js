@@ -13,6 +13,11 @@ import createHttpError from 'http-errors'
 import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
+import {setupPassport} from './lib/util/passport.js'
+import {validateAndParseJson} from './lib/util/woocommerce.js'
+
+import * as Member from './lib/models/member.js'
+
 import cache from './lib/cache.js'
 import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
@@ -22,10 +27,6 @@ import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
-import {setupPassport} from './lib/util/passport.js'
-import {validateAndParseJson} from './lib/util/woocommerce.js'
-
-import * as Member from './lib/models/member.js'
 
 await mongo.connect()
 await cache.load()
