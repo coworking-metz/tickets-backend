@@ -6,7 +6,6 @@ import process from 'node:process'
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
-import Papa from 'papaparse'
 import {add} from 'date-fns'
 import createHttpError from 'http-errors'
 
@@ -16,14 +15,13 @@ import errorHandler from './lib/util/error-handler.js'
 import {setupPassport} from './lib/util/passport.js'
 import {validateAndParseJson} from './lib/util/woocommerce.js'
 
+import statsRoutes from './lib/routes/stats.js'
+
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/cache.js'
 import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
-import {parseFromTo} from './lib/dates.js'
-import {computeIncomes} from './lib/models.js'
-import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
@@ -43,63 +41,6 @@ if (process.env.NODE_ENV === 'production') {
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
-
-app.get('/stats', w(async (req, res) => {
-  const stats = await computeStats()
-  res.send(stats)
-}))
-
-const PERIODS_TYPES = new Set(['day', 'week', 'month', 'year'])
-
-app.get('/stats/:periodType', w(async (req, res) => {
-  const {periodType} = req.params
-
-  if (!PERIODS_TYPES.has(periodType)) {
-    return res.sendStatus(404)
-  }
-
-  const {from, to} = parseFromTo(req.query.from, req.query.to)
-
-  const stats = await computePeriodsStats(periodType, {
-    includesCurrent: req.query.includesCurrent === '1',
-    from,
-    to
-  })
-
-  if (req.query.format === 'csv') {
-    return res.type('text/csv').send(
-      Papa.unparse(stats.map(s => asCsv(s)))
-    )
-  }
-
-  res.send(stats)
-}))
-
-app.get('/stats/incomes/:periodType', w(async (req, res) => {
-  const {periodType} = req.params
-
-  if (!PERIODS_TYPES.has(periodType)) {
-    return res.sendStatus(404)
-  }
-
-  const {from, to} = parseFromTo(req.query.from, req.query.to)
-
-  const stats = await computeIncomes(periodType, from, to)
-
-  if (req.query.format === 'csv') {
-    return res.type('text/csv').send(
-      Papa.unparse(stats.map(s => ({
-        date: s.date,
-        type: s.type,
-        used_tickets: s.data.usedTickets,
-        days_abos: s.data.daysAbo,
-        incomes: s.data.incomes
-      })))
-    )
-  }
-
-  res.send(stats)
-}))
 
 app.param('userId', w(async (req, res, next) => {
   const {userId} = req.params
@@ -139,6 +80,7 @@ async function resolveUserUsingEmail(req, res, next) {
 
 /* Public access */
 
+app.use('/stats', statsRoutes)
 app.get('/coworkersNow', w(coworkersNow))
 
 /* General purpose */
@@ -209,8 +151,3 @@ const port = process.env.PORT || 8000
 app.listen(port, () => {
   console.log(`Start listening on port ${port}!`)
 })
-
-// Précalcul des données
-if (process.env.PRECOMPUTE_STATS === '1') {
-  await Promise.all([...PERIODS_TYPES].map(periodType => computePeriodsStats(periodType)))
-}
