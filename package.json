@@ -44,7 +44,6 @@
         "never"
       ],
       "unicorn/prevent-abbreviations": "off",
-      "unicorn/no-array-callback-reference": "off",
       "import/no-unassigned-import": "off",
       "import/order": "off"
     }
