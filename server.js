@@ -15,7 +15,7 @@ import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
-import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
+import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {checkToken, authRouter} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
@@ -154,7 +154,6 @@ app.post('/api/heartbeat', express.urlencoded({extended: false}), checkToken(adm
 app.get('/api/mac', checkToken(adminTokens), w(getMacAddresses))
 app.post('/api/mac', express.urlencoded({extended: false}), checkToken(adminTokens), w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), checkToken(adminTokens), w(updatePresence))
-app.post('/api/collections-data', express.urlencoded({extended: false}), checkToken(adminTokens), w(getCollectionsData))
 app.post('/api/notify', express.urlencoded({extended: false}), checkToken(adminTokens), w(notify))
 
 const validateAndParseJson = express.json({
