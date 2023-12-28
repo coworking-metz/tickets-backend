@@ -43,7 +43,6 @@
         "error",
         "never"
       ],
-      "unicorn/no-array-reduce": "off",
       "unicorn/prevent-abbreviations": "off",
       "unicorn/no-array-callback-reference": "off",
       "unicorn/prefer-code-point": "off",
