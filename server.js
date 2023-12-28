@@ -101,7 +101,7 @@ app.get('/api/current-users', ensureToken, w(getCurrentMembers))
 /* Presences */
 
 app.post('/api/heartbeat', express.urlencoded({extended: false}), ensureToken, w(heartbeat))
-app.get('/api/mac', multiAuth, w(getMacAddresses))
+app.get('/api/mac', multiAuth, w(getMacAddresses)) // Unused
 app.post('/api/mac', express.urlencoded({extended: false}), ensureToken, w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), ensureToken, w(updatePresence))
 app.post('/api/notify', express.urlencoded({extended: false}), ensureToken, w(notify))
