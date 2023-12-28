@@ -2,7 +2,6 @@
 import 'dotenv/config.js'
 
 import process from 'node:process'
-import {createHmac} from 'node:crypto'
 
 import express from 'express'
 import cors from 'cors'
@@ -24,6 +23,7 @@ import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 import {setupPassport} from './lib/util/passport.js'
+import {validateAndParseJson} from './lib/util/woocommerce.js'
 
 import * as Member from './lib/models/member.js'
 
@@ -153,18 +153,6 @@ app.get('/api/mac', multiAuth, w(getMacAddresses))
 app.post('/api/mac', express.urlencoded({extended: false}), ensureToken, w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), ensureToken, w(updatePresence))
 app.post('/api/notify', express.urlencoded({extended: false}), ensureToken, w(notify))
-
-const validateAndParseJson = express.json({
-  verify(req, res, buf) {
-    const computedSignature = createHmac('sha256', process.env.WP_WC_WEBHOOK_SECRET)
-      .update(buf, 'utf8')
-      .digest('base64')
-
-    if (req.get('x-wc-webhook-signature') !== computedSignature) {
-      throw new Error('Webhook signature mismatch')
-    }
-  }
-})
 
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
 app.post('/api/sync-user-webhook', ensureToken, w(syncUserWebhook))
