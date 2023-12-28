@@ -139,26 +139,17 @@ async function resolveUserUsingEmail(req, res, next) {
 }
 
 app.get('/coworkersNow', w(coworkersNow))
-app.post('/coworkersNow', w(coworkersNow))
-
-app.get('/api/coworkers-now', w(coworkersNow))
-app.post('/api/coworkers-now', w(coworkersNow))
 
 app.get('/api/user-stats', checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserStats))
 app.post('/api/user-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserStats))
 app.get('/api/users/:userId/stats', checkToken(adminTokens), w(getUserStats))
 
 app.get('/api/user-presences', checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserPresences))
-app.post('/api/user-presences', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserPresences))
 app.get('/api/users/:userId/presences', checkToken(adminTokens), w(getUserPresences))
 
 app.get('/api/voting-coworkers', checkToken(adminTokens), w(getVotingCoworkers))
-
 app.get('/api/users-stats', checkToken(adminTokens), w(getUsersStats))
-app.post('/api/users-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(getUsersStats))
-
 app.get('/api/current-users', checkToken(adminTokens), w(getCurrentUsers))
-app.post('/api/current-users', express.urlencoded({extended: false}), checkToken(adminTokens), w(getCurrentUsers))
 
 app.post('/api/heartbeat', express.urlencoded({extended: false}), checkToken(adminTokens), w(heartbeat))
 app.get('/api/mac', checkToken(adminTokens), w(getMacAddresses))
