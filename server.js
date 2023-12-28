@@ -16,7 +16,7 @@ import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
 import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
-import {checkToken, authRouter} from './lib/auth.js'
+import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
 import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
@@ -26,8 +26,6 @@ import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/
 import {setupPassport} from './lib/util/passport.js'
 
 import * as Member from './lib/models/member.js'
-
-const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
 await mongo.connect()
 await cache.load()
@@ -140,22 +138,22 @@ async function resolveUserUsingEmail(req, res, next) {
 
 app.get('/coworkersNow', w(coworkersNow))
 
-app.get('/api/user-stats', checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserStats))
-app.post('/api/user-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserStats))
-app.get('/api/users/:userId/stats', checkToken(adminTokens), w(getUserStats))
+app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getUserStats))
+app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getUserStats))
+app.get('/api/users/:userId/stats', multiAuth, w(getUserStats))
 
-app.get('/api/user-presences', checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserPresences))
-app.get('/api/users/:userId/presences', checkToken(adminTokens), w(getUserPresences))
+app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getUserPresences))
+app.get('/api/users/:userId/presences', multiAuth, w(getUserPresences))
 
-app.get('/api/voting-coworkers', checkToken(adminTokens), w(getVotingCoworkers))
-app.get('/api/users-stats', checkToken(adminTokens), w(getUsersStats))
-app.get('/api/current-users', checkToken(adminTokens), w(getCurrentUsers))
+app.get('/api/voting-coworkers', multiAuth, w(getVotingCoworkers))
+app.get('/api/users-stats', multiAuth, w(getUsersStats))
+app.get('/api/current-users', multiAuth, w(getCurrentUsers))
 
-app.post('/api/heartbeat', express.urlencoded({extended: false}), checkToken(adminTokens), w(heartbeat))
-app.get('/api/mac', checkToken(adminTokens), w(getMacAddresses))
-app.post('/api/mac', express.urlencoded({extended: false}), checkToken(adminTokens), w(getMacAddressesLegacy))
-app.post('/api/presence', express.urlencoded({extended: false}), checkToken(adminTokens), w(updatePresence))
-app.post('/api/notify', express.urlencoded({extended: false}), checkToken(adminTokens), w(notify))
+app.post('/api/heartbeat', express.urlencoded({extended: false}), ensureToken, w(heartbeat))
+app.get('/api/mac', multiAuth, w(getMacAddresses))
+app.post('/api/mac', express.urlencoded({extended: false}), ensureToken, w(getMacAddressesLegacy))
+app.post('/api/presence', express.urlencoded({extended: false}), ensureToken, w(updatePresence))
+app.post('/api/notify', express.urlencoded({extended: false}), ensureToken, w(notify))
 
 const validateAndParseJson = express.json({
   verify(req, res, buf) {
@@ -170,13 +168,9 @@ const validateAndParseJson = express.json({
 })
 
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
-app.post('/api/sync-user-webhook', checkToken(adminTokens), w(syncUserWebhook))
+app.post('/api/sync-user-webhook', ensureToken, w(syncUserWebhook))
 
-app.get('/api/token', checkToken(adminTokens), (req, res) => {
-  res.send({status: 'ok'})
-})
-
-app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
+app.post('/api/interphone', multiAuth, w(async (req, res) => {
   await pressIntercomButton()
   const now = new Date()
   res.send({
@@ -186,7 +180,7 @@ app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
   })
 }))
 
-app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
+app.post('/api/parking', multiAuth, w(async (req, res) => {
   await pressRemoteButton()
   const now = new Date()
   res.send({
