@@ -20,7 +20,7 @@ import statsRoutes from './lib/routes/stats.js'
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
-import {coworkersNow, getMemberInfos, getMemberPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentMembers, getVotingMembers} from './lib/api.js'
+import {coworkersNow, getMemberInfos, getMemberPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
@@ -86,6 +86,7 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 app.get('/api/members/:userId', multiAuth, w(getMemberInfos))
 app.get('/api/members/:userId/presences', multiAuth, w(getMemberPresences))
+app.put('/api/members/:userId/mac-addresses', express.json(), multiAuth, w(updateMemberMacAddresses))
 
 app.get('/api/voting-members', multiAuth, w(getVotingMembers))
 app.get('/api/users-stats', multiAuth, w(getUsersStats))
