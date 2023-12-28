@@ -20,7 +20,7 @@ import statsRoutes from './lib/routes/stats.js'
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
-import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
+import {coworkersNow, getMemberInfos, getMemberPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentMembers, getVotingMembers} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
@@ -84,18 +84,18 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 /* General purpose */
 
-app.get('/api/users/:userId/stats', multiAuth, w(getUserStats))
-app.get('/api/users/:userId/presences', multiAuth, w(getUserPresences))
+app.get('/api/users/:userId/stats', multiAuth, w(getMemberInfos))
+app.get('/api/users/:userId/presences', multiAuth, w(getMemberPresences))
 
-app.get('/api/voting-coworkers', multiAuth, w(getVotingCoworkers))
+app.get('/api/voting-coworkers', multiAuth, w(getVotingMembers))
 app.get('/api/users-stats', multiAuth, w(getUsersStats))
-app.get('/api/current-users', multiAuth, w(getCurrentUsers))
+app.get('/api/current-users', multiAuth, w(getCurrentMembers))
 
 /* General purpose (legacy) */
 
-app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getUserStats))
-app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getUserStats))
-app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getUserPresences))
+app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getMemberInfos))
+app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getMemberInfos))
+app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getMemberPresences))
 
 /* Presences */
 
