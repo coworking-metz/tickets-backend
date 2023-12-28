@@ -9,12 +9,13 @@ import cors from 'cors'
 import morgan from 'morgan'
 import Papa from 'papaparse'
 import {add} from 'date-fns'
+import createHttpError from 'http-errors'
 
 import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
 import cache from './lib/cache.js'
-import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
+import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {checkToken, authRouter} from './lib/auth.js'
 import {parseFromTo} from './lib/dates.js'
 import {computeIncomes} from './lib/models.js'
@@ -23,6 +24,8 @@ import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 import {setupPassport} from './lib/util/passport.js'
+
+import * as Member from './lib/models/member.js'
 
 const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
@@ -99,19 +102,55 @@ app.get('/stats/incomes/:periodType', w(async (req, res) => {
   res.send(stats)
 }))
 
+app.param('userId', w(async (req, res, next) => {
+  const {userId} = req.params
+
+  req.rawUser = await Member.findById(userId)
+
+  if (!req.rawUser && /^\d+$/.test(userId)) {
+    const wordpressId = Number.parseInt(userId, 10)
+    req.rawUser = await Member.getUserByWordpressId({wpUserId: wordpressId})
+  }
+
+  if (!req.rawUser) {
+    throw createHttpError(404, 'User not found')
+  }
+
+  next()
+}))
+
+async function resolveUserUsingEmail(req, res, next) {
+  if (req.rawUser) {
+    return next()
+  }
+
+  const email = req.method === 'POST' ? req.body.email : req.query.email
+  if (!email) {
+    throw createHttpError(400, 'Missing email')
+  }
+
+  req.rawUser = await Member.getUserByEmail({email})
+
+  if (!req.rawUser) {
+    throw createHttpError(404, 'User not found')
+  }
+
+  next()
+}
+
 app.get('/coworkersNow', w(coworkersNow))
 app.post('/coworkersNow', w(coworkersNow))
 
 app.get('/api/coworkers-now', w(coworkersNow))
 app.post('/api/coworkers-now', w(coworkersNow))
 
-app.get('/api/user-stats', checkToken(adminTokens), w(resolveUser), w(getUserStats))
-app.post('/api/user-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUser), w(getUserStats))
-app.get('/api/users/:userId/stats', checkToken(adminTokens), w(resolveUser), w(getUserStats))
+app.get('/api/user-stats', checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserStats))
+app.post('/api/user-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserStats))
+app.get('/api/users/:userId/stats', checkToken(adminTokens), w(getUserStats))
 
-app.get('/api/user-presences', checkToken(adminTokens), w(resolveUser), w(getUserPresences))
-app.post('/api/user-presences', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUser), w(getUserPresences))
-app.get('/api/users/:userId/presences', checkToken(adminTokens), w(resolveUser), w(getUserPresences))
+app.get('/api/user-presences', checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserPresences))
+app.post('/api/user-presences', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUserUsingEmail), w(getUserPresences))
+app.get('/api/users/:userId/presences', checkToken(adminTokens), w(getUserPresences))
 
 app.get('/api/voting-coworkers', checkToken(adminTokens), w(getVotingCoworkers))
 
