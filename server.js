@@ -19,7 +19,7 @@ import statsRoutes from './lib/routes/stats.js'
 
 import * as Member from './lib/models/member.js'
 
-import cache from './lib/cache.js'
+import cache from './lib/util/cache.js'
 import {coworkersNow, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
