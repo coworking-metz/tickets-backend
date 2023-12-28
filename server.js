@@ -81,20 +81,22 @@ async function resolveUserUsingEmail(req, res, next) {
 /* Public access */
 
 app.use('/stats', statsRoutes)
-app.get('/coworkersNow', w(coworkersNow))
+app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 /* General purpose */
 
-app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getUserStats))
-app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getUserStats))
 app.get('/api/users/:userId/stats', multiAuth, w(getUserStats))
-
-app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getUserPresences))
 app.get('/api/users/:userId/presences', multiAuth, w(getUserPresences))
 
 app.get('/api/voting-coworkers', multiAuth, w(getVotingCoworkers))
 app.get('/api/users-stats', multiAuth, w(getUsersStats))
 app.get('/api/current-users', multiAuth, w(getCurrentUsers))
+
+/* General purpose (legacy) */
+
+app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getUserStats))
+app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getUserStats))
+app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getUserPresences))
 
 /* Presences */
 
