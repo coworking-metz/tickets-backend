@@ -85,18 +85,19 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 /* General purpose */
 
-app.get('/api/users/:userId/stats', multiAuth, w(getMemberInfos))
-app.get('/api/users/:userId/presences', multiAuth, w(getMemberPresences))
+app.get('/api/members/:userId', multiAuth, w(getMemberInfos))
+app.get('/api/members/:userId/presences', multiAuth, w(getMemberPresences))
 
-app.get('/api/voting-coworkers', multiAuth, w(getVotingMembers))
+app.get('/api/voting-members', multiAuth, w(getVotingMembers))
 app.get('/api/users-stats', multiAuth, w(getUsersStats))
-app.get('/api/current-users', multiAuth, w(getCurrentMembers))
+app.get('/api/current-members', multiAuth, w(getCurrentMembers))
 
 /* General purpose (legacy) */
 
 app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getMemberInfos))
 app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getMemberInfos))
 app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getMemberPresences))
+app.get('/api/current-users', ensureToken, w(getCurrentMembers))
 
 /* Presences */
 
