@@ -69,7 +69,7 @@ async function resolveUserUsingEmail(req, res, next) {
     throw createHttpError(400, 'Missing email')
   }
 
-  req.rawUser = await Member.getUserByEmail({email})
+  req.rawUser = await Member.getUserByEmail(email)
 
   if (!req.rawUser) {
     throw createHttpError(404, 'User not found')
