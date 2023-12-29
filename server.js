@@ -28,7 +28,6 @@ const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',
 
 await mongo.connect()
 await cache.load()
-setupPassport()
 
 const app = express()
 
@@ -174,7 +173,12 @@ app.get('/netatmo/stations', w(async (req, res) => {
   res.send(sensors)
 }))
 
-app.use('/api/auth', authRouter())
+if (process.env.OAUTH_ENABLED === '1') {
+  setupPassport()
+  app.use('/api/auth', authRouter())
+} else {
+  console.warn('Warning: OAuth is disabled. Users will not be to login by themself.')
+}
 
 app.use(errorHandler)
 
