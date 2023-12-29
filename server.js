@@ -23,6 +23,7 @@ import cache from './lib/util/cache.js'
 import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
+import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 
@@ -163,3 +164,8 @@ const port = process.env.PORT || 8000
 app.listen(port, () => {
   console.log(`Start listening on port ${port}!`)
 })
+
+// Précalcul des données
+if (process.env.PRECOMPUTE_STATS === '1') {
+  await precomputeStats()
+}
