@@ -11,7 +11,6 @@
     "test": "ava"
   },
   "dependencies": {
-    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
@@ -22,7 +21,9 @@
     "lodash-es": "^4.17.21",
     "mongodb": "^4.17.1",
     "morgan": "^1.10.0",
+    "nanoid": "^5.0.4",
     "nodemailer": "^6.9.5",
+    "p-map": "^7.0.1",
     "papaparse": "^5.4.1",
     "passport": "^0.6.0",
     "passport-oauth2": "^1.7.0"
@@ -39,11 +40,11 @@
     "space": 2,
     "rules": {
       "camelcase": "off",
-      "comma-dangle": "off",
-      "unicorn/no-array-reduce": "off",
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
       "unicorn/prevent-abbreviations": "off",
-      "unicorn/no-array-callback-reference": "off",
-      "unicorn/prefer-code-point": "off",
       "import/no-unassigned-import": "off",
       "import/order": "off"
     }

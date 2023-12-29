@@ -2,29 +2,29 @@
 import 'dotenv/config.js'
 
 import process from 'node:process'
-import {createHmac} from 'node:crypto'
 
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
-import Papa from 'papaparse'
 import {add} from 'date-fns'
+import createHttpError from 'http-errors'
 
 import mongo from './lib/util/mongo.js'
 import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
-import cache from './lib/cache.js'
-import {coworkersNow, resolveUser, getUserStats, getUserPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, getCollectionsData, updatePresence, notify, purchaseWebhook, syncUserWebhook, getUsersStats, getCurrentUsers, getVotingCoworkers} from './lib/api.js'
-import {checkToken, authRouter} from './lib/auth.js'
-import {parseFromTo} from './lib/dates.js'
-import {computeIncomes} from './lib/models.js'
-import {computeStats, computePeriodsStats, asCsv} from './lib/stats.js'
+import {setupPassport} from './lib/util/passport.js'
+import {validateAndParseJson} from './lib/util/woocommerce.js'
+
+import statsRoutes from './lib/routes/stats.js'
+
+import * as Member from './lib/models/member.js'
+
+import cache from './lib/util/cache.js'
+import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
+import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
-import {setupPassport} from './lib/util/passport.js'
-
-const adminTokens = process.env.ADMIN_TOKENS ? process.env.ADMIN_TOKENS.split(',').filter(Boolean) : undefined
 
 await mongo.connect()
 await cache.load()
@@ -41,112 +41,84 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
-app.get('/stats', w(async (req, res) => {
-  const stats = await computeStats()
-  res.send(stats)
+app.param('userId', w(async (req, res, next) => {
+  const {userId} = req.params
+
+  req.rawUser = await Member.getUserById(userId)
+
+  // Not all users have a wordpressId
+  if (!req.rawUser && /^\d+$/.test(userId)) {
+    const wordpressId = Number.parseInt(userId, 10)
+    req.rawUser = await Member.getUserByWordpressId({wpUserId: wordpressId})
+  }
+
+  if (!req.rawUser) {
+    throw createHttpError(404, 'User not found')
+  }
+
+  next()
 }))
 
-const PERIODS_TYPES = new Set(['day', 'week', 'month', 'year'])
-
-app.get('/stats/:periodType', w(async (req, res) => {
-  const {periodType} = req.params
-
-  if (!PERIODS_TYPES.has(periodType)) {
-    return res.sendStatus(404)
+async function resolveUserUsingEmail(req, res, next) {
+  if (req.rawUser) {
+    return next()
   }
 
-  const {from, to} = parseFromTo(req.query.from, req.query.to)
-
-  const stats = await computePeriodsStats(periodType, {
-    includesCurrent: req.query.includesCurrent === '1',
-    from,
-    to
-  })
-
-  if (req.query.format === 'csv') {
-    return res.type('text/csv').send(
-      Papa.unparse(stats.map(s => asCsv(s)))
-    )
+  const email = req.method === 'POST' ? req.body.email : req.query.email
+  if (!email) {
+    throw createHttpError(400, 'Missing email')
   }
 
-  res.send(stats)
-}))
+  req.rawUser = await Member.getUserByEmail(email)
 
-app.get('/stats/incomes/:periodType', w(async (req, res) => {
-  const {periodType} = req.params
-
-  if (!PERIODS_TYPES.has(periodType)) {
-    return res.sendStatus(404)
+  if (!req.rawUser) {
+    throw createHttpError(404, 'User not found')
   }
 
-  const {from, to} = parseFromTo(req.query.from, req.query.to)
+  next()
+}
 
-  const stats = await computeIncomes(periodType, from, to)
+/* Public access */
 
-  if (req.query.format === 'csv') {
-    return res.type('text/csv').send(
-      Papa.unparse(stats.map(s => ({
-        date: s.date,
-        type: s.type,
-        used_tickets: s.data.usedTickets,
-        days_abos: s.data.daysAbo,
-        incomes: s.data.incomes
-      })))
-    )
-  }
+app.use('/stats', statsRoutes)
+app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
-  res.send(stats)
-}))
+/* General purpose */
 
-app.get('/coworkersNow', w(coworkersNow))
-app.post('/coworkersNow', w(coworkersNow))
+app.get('/api/members', w(multiAuth), w(getAllMembers))
+app.get('/api/members/:userId', w(multiAuth), w(getMemberInfos))
+app.get('/api/members/:userId/presences', w(multiAuth), w(getMemberPresences))
+app.get('/api/members/:userId/tickets', w(multiAuth), w(getMemberTickets))
+app.get('/api/members/:userId/subscriptions', w(multiAuth), w(getMemberSubscriptions))
+app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(updateMemberMacAddresses))
+app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(forceWordpressSync))
 
-app.get('/api/coworkers-now', w(coworkersNow))
-app.post('/api/coworkers-now', w(coworkersNow))
+app.get('/api/voting-members', w(multiAuth), w(getVotingMembers))
+app.get('/api/users-stats', w(multiAuth), w(getUsersStats))
+app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
 
-app.get('/api/user-stats', checkToken(adminTokens), w(resolveUser), w(getUserStats))
-app.post('/api/user-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUser), w(getUserStats))
-app.get('/api/users/:userId/stats', checkToken(adminTokens), w(resolveUser), w(getUserStats))
+/* General purpose (legacy) */
 
-app.get('/api/user-presences', checkToken(adminTokens), w(resolveUser), w(getUserPresences))
-app.post('/api/user-presences', express.urlencoded({extended: false}), checkToken(adminTokens), w(resolveUser), w(getUserPresences))
-app.get('/api/users/:userId/presences', checkToken(adminTokens), w(resolveUser), w(getUserPresences))
+app.get('/api/user-stats', w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
+app.post('/api/user-stats', express.urlencoded({extended: false}), w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
+app.get('/api/user-presences', w(ensureToken), w(resolveUserUsingEmail), w(getMemberPresences))
+app.get('/api/current-users', w(ensureToken), w(getCurrentMembers))
 
-app.get('/api/voting-coworkers', checkToken(adminTokens), w(getVotingCoworkers))
+/* Presences */
 
-app.get('/api/users-stats', checkToken(adminTokens), w(getUsersStats))
-app.post('/api/users-stats', express.urlencoded({extended: false}), checkToken(adminTokens), w(getUsersStats))
+app.post('/api/heartbeat', express.urlencoded({extended: false}), w(ensureToken), w(heartbeat))
+app.get('/api/mac', w(multiAuth), w(getMacAddresses)) // Unused
+app.post('/api/mac', express.urlencoded({extended: false}), w(ensureToken), w(getMacAddressesLegacy))
+app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken), w(updatePresence))
+app.post('/api/notify', express.urlencoded({extended: false}), w(ensureToken), w(notify))
 
-app.get('/api/current-users', checkToken(adminTokens), w(getCurrentUsers))
-app.post('/api/current-users', express.urlencoded({extended: false}), checkToken(adminTokens), w(getCurrentUsers))
-
-app.post('/api/heartbeat', express.urlencoded({extended: false}), checkToken(adminTokens), w(heartbeat))
-app.get('/api/mac', checkToken(adminTokens), w(getMacAddresses))
-app.post('/api/mac', express.urlencoded({extended: false}), checkToken(adminTokens), w(getMacAddressesLegacy))
-app.post('/api/presence', express.urlencoded({extended: false}), checkToken(adminTokens), w(updatePresence))
-app.post('/api/collections-data', express.urlencoded({extended: false}), checkToken(adminTokens), w(getCollectionsData))
-app.post('/api/notify', express.urlencoded({extended: false}), checkToken(adminTokens), w(notify))
-
-const validateAndParseJson = express.json({
-  verify(req, res, buf) {
-    const computedSignature = createHmac('sha256', process.env.WP_WC_WEBHOOK_SECRET)
-      .update(buf, 'utf8')
-      .digest('base64')
-
-    if (req.get('x-wc-webhook-signature') !== computedSignature) {
-      throw new Error('Webhook signature mismatch')
-    }
-  }
-})
+/* Webhooks */
 
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
-app.post('/api/sync-user-webhook', checkToken(adminTokens), w(syncUserWebhook))
 
-app.get('/api/token', checkToken(adminTokens), (req, res) => {
-  res.send({status: 'ok'})
-})
+/* Services */
 
-app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
+app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
   await pressIntercomButton()
   const now = new Date()
   res.send({
@@ -156,7 +128,7 @@ app.post('/api/interphone', checkToken(adminTokens), w(async (req, res) => {
   })
 }))
 
-app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
+app.post('/api/parking', w(multiAuth), w(async (req, res) => {
   await pressRemoteButton()
   const now = new Date()
   res.send({
@@ -166,12 +138,16 @@ app.post('/api/parking', checkToken(adminTokens), w(async (req, res) => {
   })
 }))
 
-app.get('/api/ping', w(ping))
-
 app.get('/netatmo/stations', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
 }))
+
+/* Util */
+
+app.get('/api/ping', w(ping))
+
+/* Auth */
 
 if (process.env.OAUTH_ENABLED === '1') {
   setupPassport()
@@ -187,8 +163,3 @@ const port = process.env.PORT || 8000
 app.listen(port, () => {
   console.log(`Start listening on port ${port}!`)
 })
-
-// Précalcul des données
-if (process.env.PRECOMPUTE_STATS === '1') {
-  await Promise.all([...PERIODS_TYPES].map(periodType => computePeriodsStats(periodType)))
-}
