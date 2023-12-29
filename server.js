@@ -20,12 +20,11 @@ import statsRoutes from './lib/routes/stats.js'
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
-import {coworkersNow, getMemberInfos, getMemberPresences, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
+import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
-import {retrieveUserFromAccessToken, isUserAdmin, managerRouter} from './lib/manager/routes.js'
 
 await mongo.connect()
 await cache.load()
@@ -46,8 +45,9 @@ if (process.env.NODE_ENV !== 'production') {
 app.param('userId', w(async (req, res, next) => {
   const {userId} = req.params
 
-  req.rawUser = await Member.findById(userId)
+  req.rawUser = await Member.getUserById(userId)
 
+  // Not all users have a wordpressId
   if (!req.rawUser && /^\d+$/.test(userId)) {
     const wordpressId = Number.parseInt(userId, 10)
     req.rawUser = await Member.getUserByWordpressId({wpUserId: wordpressId})
@@ -86,29 +86,32 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 /* General purpose */
 
-app.get('/api/members/:userId', multiAuth, w(getMemberInfos))
-app.get('/api/members/:userId/presences', multiAuth, w(getMemberPresences))
-app.put('/api/members/:userId/mac-addresses', express.json(), multiAuth, w(updateMemberMacAddresses))
-app.post('/api/members/:userId/sync-wordpress', multiAuth, w(forceWordpressSync))
+app.get('/api/members', w(multiAuth), w(getAllMembers))
+app.get('/api/members/:userId', w(multiAuth), w(getMemberInfos))
+app.get('/api/members/:userId/presences', w(multiAuth), w(getMemberPresences))
+app.get('/api/members/:userId/tickets', w(multiAuth), w(getMemberTickets))
+app.get('/api/members/:userId/subscriptions', w(multiAuth), w(getMemberSubscriptions))
+app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(updateMemberMacAddresses))
+app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(forceWordpressSync))
 
-app.get('/api/voting-members', multiAuth, w(getVotingMembers))
-app.get('/api/users-stats', multiAuth, w(getUsersStats))
-app.get('/api/current-members', multiAuth, w(getCurrentMembers))
+app.get('/api/voting-members', w(multiAuth), w(getVotingMembers))
+app.get('/api/users-stats', w(multiAuth), w(getUsersStats))
+app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
 
 /* General purpose (legacy) */
 
-app.get('/api/user-stats', ensureToken, w(resolveUserUsingEmail), w(getMemberInfos))
-app.post('/api/user-stats', express.urlencoded({extended: false}), ensureToken, w(resolveUserUsingEmail), w(getMemberInfos))
-app.get('/api/user-presences', ensureToken, w(resolveUserUsingEmail), w(getMemberPresences))
-app.get('/api/current-users', ensureToken, w(getCurrentMembers))
+app.get('/api/user-stats', w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
+app.post('/api/user-stats', express.urlencoded({extended: false}), w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
+app.get('/api/user-presences', w(ensureToken), w(resolveUserUsingEmail), w(getMemberPresences))
+app.get('/api/current-users', w(ensureToken), w(getCurrentMembers))
 
 /* Presences */
 
-app.post('/api/heartbeat', express.urlencoded({extended: false}), ensureToken, w(heartbeat))
-app.get('/api/mac', multiAuth, w(getMacAddresses)) // Unused
-app.post('/api/mac', express.urlencoded({extended: false}), ensureToken, w(getMacAddressesLegacy))
-app.post('/api/presence', express.urlencoded({extended: false}), ensureToken, w(updatePresence))
-app.post('/api/notify', express.urlencoded({extended: false}), ensureToken, w(notify))
+app.post('/api/heartbeat', express.urlencoded({extended: false}), w(ensureToken), w(heartbeat))
+app.get('/api/mac', w(multiAuth), w(getMacAddresses)) // Unused
+app.post('/api/mac', express.urlencoded({extended: false}), w(ensureToken), w(getMacAddressesLegacy))
+app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken), w(updatePresence))
+app.post('/api/notify', express.urlencoded({extended: false}), w(ensureToken), w(notify))
 
 /* Webhooks */
 
@@ -116,7 +119,7 @@ app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
 
 /* Services */
 
-app.post('/api/interphone', multiAuth, w(async (req, res) => {
+app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
   await pressIntercomButton()
   const now = new Date()
   res.send({
@@ -126,7 +129,7 @@ app.post('/api/interphone', multiAuth, w(async (req, res) => {
   })
 }))
 
-app.post('/api/parking', multiAuth, w(async (req, res) => {
+app.post('/api/parking', w(multiAuth), w(async (req, res) => {
   await pressRemoteButton()
   const now = new Date()
   res.send({
@@ -148,7 +151,6 @@ app.get('/api/ping', w(ping))
 /* Auth */
 
 app.use('/api/auth', authRouter())
-app.use('/api/manager', w(retrieveUserFromAccessToken), w(isUserAdmin), managerRouter())
 
 app.use(errorHandler)
 
