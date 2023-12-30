@@ -92,6 +92,19 @@ Or if you want some live-reload:
 yarn dev
 ```
 
+## Useful scripts
+
+### Send daily notification emails
+
+Tickets bundles a script to send notification emails to members.
+You should consider executing this script once a day, at the end of the day.
+
+```bash
+node scripts/send-notification-emails.js
+```
+
+Pro-tips: use `crontab -e`
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

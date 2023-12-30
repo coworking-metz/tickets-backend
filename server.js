@@ -20,7 +20,7 @@ import statsRoutes from './lib/routes/stats.js'
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
-import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, notify, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
+import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
@@ -111,7 +111,6 @@ app.post('/api/heartbeat', express.urlencoded({extended: false}), w(ensureToken)
 app.get('/api/mac', w(multiAuth), w(getMacAddresses)) // Unused
 app.post('/api/mac', express.urlencoded({extended: false}), w(ensureToken), w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken), w(updatePresence))
-app.post('/api/notify', express.urlencoded({extended: false}), w(ensureToken), w(notify))
 
 /* Webhooks */
 
