@@ -50,7 +50,7 @@ app.param('userId', w(async (req, res, next) => {
   // Not all users have a wordpressId
   if (!req.rawUser && /^\d+$/.test(userId)) {
     const wordpressId = Number.parseInt(userId, 10)
-    req.rawUser = await Member.getUserByWordpressId({wpUserId: wordpressId})
+    req.rawUser = await Member.getUserByWordpressId(wordpressId)
   }
 
   if (!req.rawUser) {
