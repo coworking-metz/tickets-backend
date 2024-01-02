@@ -20,7 +20,7 @@ import statsRoutes from './lib/routes/stats.js'
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
-import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddresses, getMacAddressesLegacy, updatePresence, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
+import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddressesLegacy, updatePresence, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
@@ -50,7 +50,7 @@ app.param('userId', w(async (req, res, next) => {
   // Not all users have a wordpressId
   if (!req.rawUser && /^\d+$/.test(userId)) {
     const wordpressId = Number.parseInt(userId, 10)
-    req.rawUser = await Member.getUserByWordpressId({wpUserId: wordpressId})
+    req.rawUser = await Member.getUserByWordpressId(wordpressId)
   }
 
   if (!req.rawUser) {
@@ -108,7 +108,6 @@ app.get('/api/current-users', w(ensureToken), w(getCurrentMembers))
 /* Presences */
 
 app.post('/api/heartbeat', express.urlencoded({extended: false}), w(ensureToken), w(heartbeat))
-app.get('/api/mac', w(multiAuth), w(getMacAddresses)) // Unused
 app.post('/api/mac', express.urlencoded({extended: false}), w(ensureToken), w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken), w(updatePresence))
 
