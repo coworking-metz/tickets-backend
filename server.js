@@ -20,7 +20,26 @@ import statsRoutes from './lib/routes/stats.js'
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
-import {coworkersNow, getAllMembers, getMemberInfos, getMemberPresences, getMemberTickets, getMemberSubscriptions, heartbeat, getMacAddressesLegacy, updatePresence, purchaseWebhook, forceWordpressSync, getUsersStats, getCurrentMembers, getVotingMembers, updateMemberMacAddresses} from './lib/api.js'
+
+import {
+  coworkersNow,
+  getAllMembers,
+  getMemberInfos,
+  getMemberActivity,
+  getMemberPresences,
+  getMemberTickets,
+  getMemberSubscriptions,
+  heartbeat,
+  getMacAddressesLegacy,
+  updatePresence,
+  purchaseWebhook,
+  forceWordpressSync,
+  getUsersStats,
+  getCurrentMembers,
+  getVotingMembers,
+  updateMemberMacAddresses
+} from './lib/api.js'
+
 import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
@@ -88,7 +107,7 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 app.get('/api/members', w(multiAuth), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(getMemberInfos))
-app.get('/api/members/:userId/presences', w(multiAuth), w(getMemberPresences))
+app.get('/api/members/:userId/activity', w(multiAuth), w(getMemberActivity))
 app.get('/api/members/:userId/tickets', w(multiAuth), w(getMemberTickets))
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(getMemberSubscriptions))
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(updateMemberMacAddresses))
@@ -102,6 +121,7 @@ app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
 
 app.get('/api/user-stats', w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
 app.post('/api/user-stats', express.urlencoded({extended: false}), w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
+app.get('/api/members/:userId/presences', w(multiAuth), w(getMemberPresences))
 app.get('/api/user-presences', w(ensureToken), w(resolveUserUsingEmail), w(getMemberPresences))
 app.get('/api/current-users', w(ensureToken), w(getCurrentMembers))
 
