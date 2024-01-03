@@ -15,7 +15,7 @@ await mongo.connect()
 const expiringAboStartDate = add(sub(new Date(), {months: 1}), {days: 1}).toISOString().slice(0, 10)
 const candidateEndOfAboUsers = await mongo.db.collection('users')
   .find({'profile.abos': {$elemMatch: {aboStart: expiringAboStartDate}}})
-  .project({_id: 0, 'emails.address': 1, 'profile.abos': 1})
+  .project({_id: 0, email: 1, 'profile.abos': 1})
   .toArray()
 const tomorrow = add(new Date(), {days: 1}).toISOString().slice(0, 10)
 const oneMonthBeforeTomorrow = sub(new Date(tomorrow), {months: 1}).toISOString().slice(0, 10)
@@ -25,7 +25,7 @@ const endOfAboUsers = candidateEndOfAboUsers.filter(user => {
   )
   return !hasAboForTomorrow
 })
-const endOfAboEmails = chain(endOfAboUsers).map('emails').flatten().value()
+const endOfAboEmails = chain(endOfAboUsers).map('email').value()
 await Promise.all(endOfAboEmails.map(async email => sendMail(
   renderFinAbonnement(),
   [email]
@@ -35,7 +35,7 @@ await Promise.all(endOfAboEmails.map(async email => sendMail(
 const yesterday = sub(new Date(), {days: 1}).toISOString().slice(0, 10)
 const todayUsers = await mongo.db.collection('users')
   .find({'profile.heartbeat': {$gt: yesterday}})
-  .project({_id: 0, 'emails.address': 1, profile: 1})
+  .project({_id: 0, email: 1, profile: 1})
   .toArray()
 const today = (new Date()).toISOString().slice(0, 10)
 const oneMonthAgo = sub(new Date(), {months: 1}).toISOString().slice(0, 10)
@@ -43,7 +43,7 @@ const outOfTicketsUsers = todayUsers.filter(user => {
   const isDuringAbo = user.profile.abos.some(abo => oneMonthAgo < abo.aboStart && abo.aboStart <= today)
   return !isDuringAbo && user.profile.balance <= 0
 })
-const outOfTicketsEmails = chain(outOfTicketsUsers).map('emails').flatten().value()
+const outOfTicketsEmails = chain(outOfTicketsUsers).map('email').value()
 await Promise.all(outOfTicketsEmails.map(async email => sendMail(
   renderPlusDeTickets(),
   [email]
