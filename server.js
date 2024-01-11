@@ -138,7 +138,7 @@ app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
 /* Services */
 
 app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
-  if (!req.isAdmin && !req.user.capabilities.includes('UNLOCK_GATE')) {
+  if (!req.isAdmin && !req.user?.capabilities.includes('UNLOCK_GATE')) {
     throw createHttpError(403, 'Forbidden')
   }
 
@@ -152,7 +152,7 @@ app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
 }))
 
 app.post('/api/parking', w(multiAuth), w(async (req, res) => {
-  if (!req.isAdmin && !req.user.capabilities.includes('PARKING_ACCESS')) {
+  if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
     throw createHttpError(403, 'Forbidden')
   }
 
