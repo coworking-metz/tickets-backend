@@ -40,7 +40,7 @@ import {
   updateMemberMacAddresses
 } from './lib/api.js'
 
-import {ensureToken, multiAuth, authRouter} from './lib/auth.js'
+import {ensureToken, ensureAdmin, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
@@ -105,7 +105,7 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 /* General purpose */
 
-app.get('/api/members', w(multiAuth), w(getAllMembers))
+app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(getMemberInfos))
 app.get('/api/members/:userId/activity', w(multiAuth), w(getMemberActivity))
 app.get('/api/members/:userId/tickets', w(multiAuth), w(getMemberTickets))
@@ -113,8 +113,8 @@ app.get('/api/members/:userId/subscriptions', w(multiAuth), w(getMemberSubscript
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(updateMemberMacAddresses))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(forceWordpressSync))
 
-app.get('/api/voting-members', w(multiAuth), w(getVotingMembers))
-app.get('/api/users-stats', w(multiAuth), w(getUsersStats))
+app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
+app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
 app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
 
 /* General purpose (legacy) */
@@ -138,6 +138,10 @@ app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
 /* Services */
 
 app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
+  if (!req.isAdmin && !req.user?.capabilities.includes('UNLOCK_GATE')) {
+    throw createHttpError(403, 'Forbidden')
+  }
+
   await pressIntercomButton()
   const now = new Date()
   res.send({
@@ -148,6 +152,10 @@ app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
 }))
 
 app.post('/api/parking', w(multiAuth), w(async (req, res) => {
+  if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
+    throw createHttpError(403, 'Forbidden')
+  }
+
   await pressRemoteButton()
   const now = new Date()
   res.send({
