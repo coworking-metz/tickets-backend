@@ -33,6 +33,7 @@ import {
   getMacAddressesLegacy,
   updatePresence,
   purchaseWebhook,
+  syncUserWebhook,
   forceWordpressSync,
   getUsersStats,
   getCurrentMembers,
@@ -134,6 +135,7 @@ app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken),
 /* Webhooks */
 
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
+app.post('/api/sync-user-webhook', validateAndParseJson, w(syncUserWebhook))
 
 /* Services */
 
