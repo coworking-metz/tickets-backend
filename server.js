@@ -44,7 +44,7 @@ import {ensureToken, ensureAdmin, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, getPhoneBoothsOccupation, pressIntercomButton} from './lib/services/home-assistant.js'
 
 await mongo.connect()
 await cache.load()
@@ -168,6 +168,10 @@ app.post('/api/parking', w(multiAuth), w(async (req, res) => {
 app.get('/netatmo/stations', w(async (req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
+}))
+
+app.get('/api/phone-booths', w(multiAuth), w(async (req, res) => {
+  res.send(await getPhoneBoothsOccupation())
 }))
 
 /* Util */
