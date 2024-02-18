@@ -16,6 +16,7 @@ import {setupPassport} from './lib/util/passport.js'
 import {validateAndParseJson} from './lib/util/woocommerce.js'
 
 import statsRoutes from './lib/routes/stats.js'
+import onPremiseRoutes from './lib/routes/on-premise.js'
 
 import * as Member from './lib/models/member.js'
 
@@ -44,7 +45,7 @@ import {ensureToken, ensureAdmin, multiAuth, authRouter} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo, getPhoneBoothsOccupation, pressIntercomButton} from './lib/services/home-assistant.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 
 await mongo.connect()
 await cache.load()
@@ -170,9 +171,7 @@ app.get('/netatmo/stations', w(async (req, res) => {
   res.send(sensors)
 }))
 
-app.get('/api/phone-booths', w(multiAuth), w(async (req, res) => {
-  res.send(await getPhoneBoothsOccupation())
-}))
+app.use('/api/on-premise', onPremiseRoutes)
 
 /* Util */
 
