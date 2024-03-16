@@ -41,7 +41,7 @@ import {
   updateMemberMacAddresses
 } from './lib/api.js'
 
-import {ensureToken, ensureAdmin, multiAuth, authRouter} from './lib/auth.js'
+import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
@@ -171,7 +171,7 @@ app.get('/netatmo/stations', w(async (req, res) => {
   res.send(sensors)
 }))
 
-app.use('/api/on-premise', onPremiseRoutes)
+app.use('/api/on-premise', w(ensureAccess), onPremiseRoutes)
 
 /* Util */
 
