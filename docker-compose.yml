@@ -11,5 +11,29 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  greenmail:
+    image: greenmail/standalone:1.6.14
+    container_name: tickets-backend-greenmail
+    environment:
+      - GREENMAIL_OPTS=-Dgreenmail.hostname=0.0.0.0 -Dgreenmail.setup.test.smtp -Dgreenmail.setup.test.imap -Dgreenmail.auth.disabled
+    ports:
+      - "33025:3025" # SMTP
+      - "33143:3143" # IMAP
+
+  roundcube:
+    image: roundcube/roundcubemail:1.6.1-apache
+    container_name: tickets-backend-roundcube
+    depends_on:
+      - greenmail
+    ports:
+      - "38000:80"
+      - "39000:9000"
+    environment:
+      ROUNDCUBEMAIL_DEFAULT_HOST: greenmail  # IMAP server
+      ROUNDCUBEMAIL_DEFAULT_PORT: 3143       # IMAP port
+      ROUNDCUBEMAIL_SMTP_SERVER: greenmail   # SMTP server
+      ROUNDCUBEMAIL_SMTP_PORT: 3025          # SMTP port
+
+
 volumes:
   mongodb_data:
