@@ -71,6 +71,7 @@ To learn how to consume JWT authentication, check out [AUTH.md](./AUTH.md).
 
 To properly configure auth, here are the following environment variables to set:
 - `OAUTH_FOLLOW_WHITELIST`: list of origins that are allowed to retrieve JWT tokens, separated by commas. Trailing slash does matter.
+- `OAUTH_FOLLOW_ANY`: if you want to allow any origin. This should not be enabled in production. Default to 0.
 - `WORDPRESS_BASE_URL`: WordPress server managing users. Default to `https://www.coworking-metz.fr/`.
 - `WORDPRESS_OAUTH_CLIENT_ID`: WordPress OAuth plugin client identifier. You will find it the plugin settings.
 - `WORDPRESS_OAUTH_CLIENT_SECRET`: WordPress OAuth plugin client secret. You will find it the plugin settings.
