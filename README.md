@@ -98,9 +98,7 @@ Or if you want some live-reload:
 yarn dev
 ```
 
-## Useful scripts
-
-### Send daily notification emails
+## Email notifications
 
 Tickets bundles a script to send notification emails to members.
 You should consider executing this script once a day, at the end of the day.
@@ -110,6 +108,25 @@ node scripts/send-notification-emails.js
 ```
 
 Pro-tips: use `crontab -e`
+
+When improving emails and to make sure the email is properly rendered, you can start [Greenmail](https://greenmail-mail-test.github.io/greenmail/) and [Roundcube](https://roundcube.net/) with `docker-compose up`.
+This will setup a SMTP/IMAP server and a WebUI for test purposes.
+
+Then properly set your local environment:
+```
+SMTP_HOST=localhost
+SMTP_PORT=33025
+SMTP_USER=anyUser
+SMTP_PASS=anyPassword
+```
+
+You should use the following command to take into account the local config when sending emails:
+```bash
+node --env-file .env scripts/send-notification-emails.js
+```
+
+Once emails have been sent, you can read them at http://localhost:38000.
+Enter the receiver email and any password as credentials to check its mailbox.
 
 ## License
 
