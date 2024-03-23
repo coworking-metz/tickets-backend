@@ -47,6 +47,7 @@ import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
+import {getAllEvents} from './lib/services/calendar.js'
 
 await mongo.connect()
 await cache.load()
@@ -174,6 +175,10 @@ app.get('/netatmo/stations', w(async (req, res) => {
 }))
 
 app.use('/api/on-premise', w(ensureAccess), onPremiseRoutes)
+
+app.get('/api/calendar/events', w(multiAuth), w(async (req, res) => {
+  res.send(await getAllEvents())
+}))
 
 /* Util */
 
