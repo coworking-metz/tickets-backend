@@ -176,9 +176,7 @@ app.get('/netatmo/stations', w(async (req, res) => {
 
 app.use('/api/on-premise', w(ensureAccess), onPremiseRoutes)
 
-app.get('/api/calendar/events', w(multiAuth), w(async (req, res) => {
-  res.send(await getAllEvents())
-}))
+app.get('/api/calendar/events', w(multiAuth), w(getAllEvents))
 
 /* Util */
 
