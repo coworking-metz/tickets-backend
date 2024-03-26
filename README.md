@@ -58,8 +58,8 @@ In order to contact [Home Assistant](https://github.com/coworking-metz/infrastru
 
 To find the `entity_id` of the entity you want to control, go to http://homeassistant.local:8123/developer-tools/state and look at for the left column named `Entity`.
 
-> **Warning**
-> Home Assistant instance is only reachable from the local network or from the VPS.
+> [!IMPORTANT]
+> Home Assistant instance is only reachable from the local network or from the production server.
 
 ### Set up Auth
 
@@ -70,8 +70,9 @@ This results to a JWT authentification containing basic user information and acc
 To learn how to consume JWT authentication, check out [AUTH.md](./AUTH.md).
 
 To properly configure auth, here are the following environment variables to set:
+- `OAUTH_ENABLED`: words speak for themselves. Default to `0`.
 - `OAUTH_FOLLOW_WHITELIST`: list of origins that are allowed to retrieve JWT tokens, separated by commas. Trailing slash does matter.
-- `OAUTH_FOLLOW_ANY`: if you want to allow any origin. This should not be enabled in production. Default to 0.
+- `OAUTH_FOLLOW_ANY`: if you want to allow any origin. This should not be enabled in production. Default to `0`.
 - `WORDPRESS_BASE_URL`: WordPress server managing users. Default to `https://www.coworking-metz.fr/`.
 - `WORDPRESS_OAUTH_CLIENT_ID`: WordPress OAuth plugin client identifier. You will find it the plugin settings.
 - `WORDPRESS_OAUTH_CLIENT_SECRET`: WordPress OAuth plugin client secret. You will find it the plugin settings.
@@ -80,6 +81,10 @@ To properly configure auth, here are the following environment variables to set:
 - `JWT_REFRESH_TOKEN_PRIVATE_KEY`: anything you want, as long as you don't tell anyone.
 - `JWT_REFRESH_TOKEN_EXPIRATION_TIME`: how long an refresh token should live. In the [zeit/ms](https://github.com/zeit/ms.js) format. Default to `30d`.
 - `JWT_REFRESH_TOKEN_SECRET_KEY`: anything you want with at least 32 characters. Like it says in the name, keep it secret.
+
+### Calendar events
+
+To retrieve events from a iCal calendar, you can setup `CALENDAR_EVENTS_URL` which should provide events in the [`ics`](https://en.wikipedia.org/wiki/ICalendar) format.
 
 ## Start the project
 
