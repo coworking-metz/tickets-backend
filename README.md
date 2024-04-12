@@ -128,6 +128,8 @@ node --env-file .env scripts/send-notification-emails.js
 Once emails have been sent, you can read them at http://localhost:38000.
 Enter the receiver email and any password as credentials to check its mailbox.
 
+If you want to quickly test the rendered result on multiple email client, go to https://testi.at/.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
