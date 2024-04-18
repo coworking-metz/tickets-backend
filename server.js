@@ -27,7 +27,6 @@ import {
   getAllMembers,
   getMemberInfos,
   getMemberActivity,
-  getMemberPresences,
   getMemberTickets,
   getMemberSubscriptions,
   heartbeat,
@@ -82,25 +81,6 @@ app.param('userId', w(async (req, res, next) => {
   next()
 }))
 
-async function resolveUserUsingEmail(req, res, next) {
-  if (req.rawUser) {
-    return next()
-  }
-
-  const email = req.method === 'POST' ? req.body.email : req.query.email
-  if (!email) {
-    throw createHttpError(400, 'Missing email')
-  }
-
-  req.rawUser = await Member.getUserByEmail(email)
-
-  if (!req.rawUser) {
-    throw createHttpError(404, 'User not found')
-  }
-
-  next()
-}
-
 /* Public access */
 
 app.use('/stats', statsRoutes)
@@ -119,14 +99,6 @@ app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(forceWordpressSy
 app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
 app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
 app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
-
-/* General purpose (legacy) */
-
-app.get('/api/user-stats', w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
-app.post('/api/user-stats', express.urlencoded({extended: false}), w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
-app.get('/api/members/:userId/presences', w(multiAuth), w(getMemberPresences))
-app.get('/api/user-presences', w(ensureToken), w(resolveUserUsingEmail), w(getMemberPresences))
-app.get('/api/current-users', w(ensureToken), w(getCurrentMembers))
 
 /* Presences */
 
