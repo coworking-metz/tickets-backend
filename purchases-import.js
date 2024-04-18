@@ -7,8 +7,7 @@ try {
 
   const years = Purchases.getYears()
   for (const year of years) {
-    // eslint-disable-next-line
-    await Purchases.importPurchases(year)
+    await Purchases.importPurchases(year) // eslint-disable-line no-await-in-loop
   }
 } catch (error) {
   console.error('An error occurred:', error)
