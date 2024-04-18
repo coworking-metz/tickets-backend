@@ -1,4 +1,4 @@
-import * as Purchases from './lib/models/purchases.js'
+import * as Purchases from './lib/models/purchase.js'
 import mongo from './lib/util/mongo.js'
 
 try {
@@ -7,6 +7,7 @@ try {
 
   const years = Purchases.getYears()
   for (const year of years) {
+    // eslint-disable-next-line
     await Purchases.importPurchases(year)
   }
 } catch (error) {
