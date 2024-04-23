@@ -118,6 +118,9 @@ app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
     throw createHttpError(403, 'Forbidden')
   }
 
+  // At least log who is pressing intercom button
+  console.log(`${req.user?.email || 'Someone'} is pressing intercom button`)
+
   await pressIntercomButton()
   const now = new Date()
   res.send({
@@ -131,6 +134,9 @@ app.post('/api/parking', w(multiAuth), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
     throw createHttpError(403, 'Forbidden')
   }
+
+  // At least log who is opening parking gate
+  console.log(`${req.user?.email || 'Someone'} is opening parking gate`)
 
   await pressRemoteButton()
   const now = new Date()
