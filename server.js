@@ -29,6 +29,7 @@ import {
   getMemberActivity,
   getMemberTickets,
   getMemberSubscriptions,
+  getMemberMemberships,
   heartbeat,
   getMacAddressesLegacy,
   updatePresence,
@@ -93,6 +94,7 @@ app.get('/api/members/:userId', w(multiAuth), w(getMemberInfos))
 app.get('/api/members/:userId/activity', w(multiAuth), w(getMemberActivity))
 app.get('/api/members/:userId/tickets', w(multiAuth), w(getMemberTickets))
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(getMemberSubscriptions))
+app.get('/api/members/:userId/memberships', w(multiAuth), w(getMemberMemberships))
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(updateMemberMacAddresses))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(forceWordpressSync))
 
