@@ -27,7 +27,6 @@ import {
   getAllMembers,
   getMemberInfos,
   getMemberActivity,
-  getMemberPresences,
   getMemberTickets,
   getMemberSubscriptions,
   getMemberMemberships,
@@ -83,25 +82,6 @@ app.param('userId', w(async (req, res, next) => {
   next()
 }))
 
-async function resolveUserUsingEmail(req, res, next) {
-  if (req.rawUser) {
-    return next()
-  }
-
-  const email = req.method === 'POST' ? req.body.email : req.query.email
-  if (!email) {
-    throw createHttpError(400, 'Missing email')
-  }
-
-  req.rawUser = await Member.getUserByEmail(email)
-
-  if (!req.rawUser) {
-    throw createHttpError(404, 'User not found')
-  }
-
-  next()
-}
-
 /* Public access */
 
 app.use('/stats', statsRoutes)
@@ -122,14 +102,6 @@ app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers)
 app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
 app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
 
-/* General purpose (legacy) */
-
-app.get('/api/user-stats', w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
-app.post('/api/user-stats', express.urlencoded({extended: false}), w(ensureToken), w(resolveUserUsingEmail), w(getMemberInfos))
-app.get('/api/members/:userId/presences', w(multiAuth), w(getMemberPresences))
-app.get('/api/user-presences', w(ensureToken), w(resolveUserUsingEmail), w(getMemberPresences))
-app.get('/api/current-users', w(ensureToken), w(getCurrentMembers))
-
 /* Presences */
 
 app.post('/api/heartbeat', express.urlencoded({extended: false}), w(ensureToken), w(heartbeat))
@@ -148,6 +120,9 @@ app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
     throw createHttpError(403, 'Forbidden')
   }
 
+  // At least log who is pressing intercom button
+  console.log(`${req.user?.email || 'Someone'} is pressing intercom button`)
+
   await pressIntercomButton()
   const now = new Date()
   res.send({
@@ -161,6 +136,9 @@ app.post('/api/parking', w(multiAuth), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
     throw createHttpError(403, 'Forbidden')
   }
+
+  // At least log who is opening parking gate
+  console.log(`${req.user?.email || 'Someone'} is opening parking gate`)
 
   await pressRemoteButton()
   const now = new Date()
