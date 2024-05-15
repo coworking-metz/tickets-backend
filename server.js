@@ -90,13 +90,13 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 /* General purpose */
 
 app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
-app.get('/api/members/:userId', w(multiAuth), w(getMemberInfos))
-app.get('/api/members/:userId/activity', w(multiAuth), w(getMemberActivity))
-app.get('/api/members/:userId/tickets', w(multiAuth), w(getMemberTickets))
-app.get('/api/members/:userId/subscriptions', w(multiAuth), w(getMemberSubscriptions))
-app.get('/api/members/:userId/memberships', w(multiAuth), w(getMemberMemberships))
-app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(updateMemberMacAddresses))
-app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(forceWordpressSync))
+app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
+app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
+app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTickets))
+app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
+app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
+app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
+app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 
 app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
 app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
@@ -115,7 +115,7 @@ app.post('/api/sync-user-webhook', validateAndParseJson, w(syncUserWebhook))
 
 /* Services */
 
-app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
+app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('UNLOCK_GATE')) {
     throw createHttpError(403, 'Forbidden')
   }
@@ -132,7 +132,7 @@ app.post('/api/interphone', w(multiAuth), w(async (req, res) => {
   })
 }))
 
-app.post('/api/parking', w(multiAuth), w(async (req, res) => {
+app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
     throw createHttpError(403, 'Forbidden')
   }
@@ -154,7 +154,7 @@ app.get('/netatmo/stations', w(async (req, res) => {
   res.send(sensors)
 }))
 
-app.use('/api/on-premise', w(ensureAccess), onPremiseRoutes)
+app.use('/api/on-premise', w(multiAuth), w(ensureAccess), onPremiseRoutes)
 
 app.get('/api/calendar/events', w(multiAuth), w(getAllEvents))
 
