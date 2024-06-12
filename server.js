@@ -39,7 +39,8 @@ import {
   getUsersStats,
   getCurrentMembers,
   getVotingMembers,
-  updateMemberMacAddresses
+  updateMemberMacAddresses,
+  updateMemberSubscription
 } from './lib/api.js'
 
 import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
@@ -94,6 +95,7 @@ app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos)
 app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
 app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTickets))
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
+app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberSubscription))
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
