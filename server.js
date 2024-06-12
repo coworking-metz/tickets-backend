@@ -40,7 +40,9 @@ import {
   getCurrentMembers,
   getVotingMembers,
   updateMemberMacAddresses,
-  updateMemberSubscription
+  updateMemberSubscription,
+  getMemberAuditTrail,
+  getAllAuditEvents
 } from './lib/api.js'
 
 import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
@@ -92,6 +94,7 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 
 app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
+app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberAuditTrail))
 app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
 app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTickets))
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
@@ -103,6 +106,9 @@ app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w
 app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
 app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
 app.get('/api/current-members', w(multiAuth), w(getCurrentMembers))
+
+/* Audit */
+app.get('/api/audit', w(multiAuth), w(ensureAdmin), w(getAllAuditEvents))
 
 /* Presences */
 
