@@ -31,6 +31,7 @@ import {
   getMemberSubscriptions,
   getMemberMemberships,
   heartbeat,
+  location,
   getMacAddressesLegacy,
   updatePresence,
   purchaseWebhook,
@@ -113,6 +114,7 @@ app.get('/api/audit', w(multiAuth), w(ensureAdmin), w(getAllAuditEvents))
 /* Presences */
 
 app.post('/api/heartbeat', express.urlencoded({extended: false}), w(ensureToken), w(heartbeat))
+app.post('/api/location', express.urlencoded({extended: false}), w(ensureToken), w(location))
 app.post('/api/mac', express.urlencoded({extended: false}), w(ensureToken), w(getMacAddressesLegacy))
 app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken), w(updatePresence))
 
