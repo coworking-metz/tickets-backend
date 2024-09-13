@@ -28,6 +28,8 @@ import {
   getMemberInfos,
   getMemberActivity,
   getMemberTickets,
+  getMemberMealVouchers,
+  addMealsActivity,
   getMemberSubscriptions,
   getMemberMemberships,
   heartbeat,
@@ -102,6 +104,10 @@ app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
+
+/* Meals */
+app.get('/api/members/:userId/meal-vouchers', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMealVouchers))
+app.post('/api/members/:userId/meal', express.json(), w(multiAuth), w(ensureAccess), w(addMealsActivity))
 
 app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
 app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
