@@ -30,6 +30,7 @@ import {
   getMemberTickets,
   getMemberMealVouchers,
   addMealsActivity,
+  getMemberMealVouchersStats,
   getMemberSubscriptions,
   getMemberMemberships,
   heartbeat,
@@ -106,6 +107,7 @@ app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(en
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 
 /* Meals */
+app.get('/api/meals/stats/:month', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMealVouchersStats))
 app.get('/api/members/:userId/meal-vouchers', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMealVouchers))
 app.post('/api/members/:userId/meal', express.json(), w(multiAuth), w(ensureAccess), w(addMealsActivity))
 
