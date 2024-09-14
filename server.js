@@ -31,6 +31,7 @@ import {
   getMemberMealVouchers,
   addMealsActivity,
   getMemberMealVouchersStats,
+  getMemberMealVouchersActivity,
   getMemberSubscriptions,
   getMemberMemberships,
   heartbeat,
@@ -109,6 +110,7 @@ app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w
 /* Meals */
 app.get('/api/meals/stats/:month', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMealVouchersStats))
 app.get('/api/members/:userId/meal-vouchers', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMealVouchers))
+app.get('/api/members/:userId/meals-activity', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMealVouchersActivity))
 app.post('/api/members/:userId/meal', express.json(), w(multiAuth), w(ensureAccess), w(addMealsActivity))
 
 app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
