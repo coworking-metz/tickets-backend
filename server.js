@@ -44,7 +44,9 @@ import {
   updateMemberSubscription,
   getMemberAuditTrail,
   getAllAuditEvents,
-  updateMemberTicket
+  updateMemberTicket,
+  updateMemberCapabilities,
+  getMemberCapabilities
 } from './lib/api.js'
 
 import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
@@ -104,6 +106,8 @@ app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(g
 app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberSubscription))
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
+app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(getMemberCapabilities))
+app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 app.get('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMacAddressesDetails))
 
