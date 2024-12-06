@@ -55,6 +55,7 @@ import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
 import {getAllEvents} from './lib/services/calendar.js'
+import {logAuditTrail} from './lib/models/audit.js'
 
 await mongo.connect()
 await cache.load()
@@ -140,6 +141,9 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
   console.log(`${req.user?.email || 'Someone'} is pressing intercom button`)
 
   await pressIntercomButton()
+
+  logAuditTrail(req.user, 'UNLOCK_GATE')
+
   const now = new Date()
   res.send({
     triggered: now.toISOString(),
@@ -157,6 +161,9 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   console.log(`${req.user?.email || 'Someone'} is opening parking gate`)
 
   await pressRemoteButton()
+
+  logAuditTrail(req.user, 'PARKING_ACCESS')
+
   const now = new Date()
   res.send({
     triggered: now.toISOString(),
