@@ -129,8 +129,8 @@ app.post('/api/presence', express.urlencoded({extended: false}), w(ensureToken),
 
 /* Webhooks */
 
-app.get('/api/flags/:flagId', express.urlencoded({extended: false}), w(ensureToken), w(getFlag))
-app.post('/api/presence-webhook', express.json(), w(ensureToken), w(presenceWebhook))
+app.get('/api/flags/:flagId', express.urlencoded({extended: false}), w(multiAuth), w(ensureAdmin), w(getFlag))
+app.post('/api/presence-webhook', express.json(), w(multiAuth), w(ensureAdmin), w(presenceWebhook))
 app.post('/api/purchase-webhook', validateAndParseJson, w(purchaseWebhook))
 app.post('/api/sync-user-webhook', validateAndParseJson, w(syncUserWebhook))
 
