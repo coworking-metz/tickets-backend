@@ -7,7 +7,7 @@ import {chain} from 'lodash-es'
 import mongo from '../lib/util/mongo.js'
 import {sendMail} from '../lib/util/sendmail.js'
 import renderFinAbonnement from '../lib/emails/fin-abonnement.js'
-import renderPlusDeTickets from '../lib/emails/plus-de-tickets.js'
+import renderPlusDeTickets from '../lib/emails/depleted-balance.js'
 
 await mongo.connect()
 
