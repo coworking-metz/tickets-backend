@@ -49,7 +49,9 @@ import {
   updateMemberTicket,
   updateMemberCapabilities,
   getMemberCapabilities,
-  updateMemberActivity
+  updateMemberActivity,
+  updateMemberMembership,
+  addMemberMembership
 } from './lib/api.js'
 
 import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
@@ -110,6 +112,8 @@ app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), 
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
 app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberSubscription))
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
+app.post('/api/members/:userId/memberships', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberMembership))
+app.put('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberMembership))
 app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
 app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(getMemberCapabilities))
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
