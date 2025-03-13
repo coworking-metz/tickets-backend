@@ -58,7 +58,7 @@ import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './l
 import {ping} from './lib/ping.js'
 import {precomputeStats} from './lib/stats.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo, pressIntercomButton} from './lib/services/home-assistant.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
 import {getAllEvents} from './lib/services/calendar.js'
 import {logAuditTrail} from './lib/models/audit.js'
 
@@ -147,7 +147,14 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
     throw createHttpError(403, 'Accès insuffisant pour déverrouiller la porte')
   }
 
-  await pressIntercomButton()
+  await pressIntercomButton().catch((error) => {
+    notifyOnSignal(`Impossible d'appuyer sur l'interphone :\n${error.message}`)
+      .catch(notifyError => {
+        // Don't throw an error if the notification failed
+        console.error('Unable to notify about /parking error', notifyError)
+      })
+    return Promise.reject(error)
+  })
 
   logAuditTrail(req.user, 'UNLOCK_GATE')
 
@@ -164,7 +171,14 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
     throw createHttpError(403, 'Accès insuffisant pour ouvrir la barrière')
   }
 
-  await pressRemoteButton()
+  await pressRemoteButton().catch((error) => {
+    notifyOnSignal(`Impossible d'ouvrir la barrière du parking :\n${error.message}`)
+      .catch(notifyError => {
+        // Don't throw an error if the notification failed
+        console.error('Unable to notify about /parking error', notifyError)
+      })
+    return Promise.reject(error)
+  })
 
   logAuditTrail(req.user, 'PARKING_ACCESS')
 
