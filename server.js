@@ -144,11 +144,8 @@ app.post('/api/sync-user-webhook', validateAndParseJson, w(syncUserWebhook))
 
 app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('UNLOCK_GATE')) {
-    throw createHttpError(403, 'Forbidden')
+    throw createHttpError(403, 'Accès insuffisant pour déverrouiller la porte')
   }
-
-  // At least log who is pressing intercom button
-  console.log(`${req.user?.email || 'Someone'} is pressing intercom button`)
 
   await pressIntercomButton()
 
@@ -164,11 +161,8 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
 
 app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
-    throw createHttpError(403, 'Forbidden')
+    throw createHttpError(403, 'Accès insuffisant pour ouvrir la barrière')
   }
-
-  // At least log who is opening parking gate
-  console.log(`${req.user?.email || 'Someone'} is opening parking gate`)
 
   await pressRemoteButton()
 
@@ -177,8 +171,10 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   const now = new Date()
   res.send({
     triggered: now.toISOString(),
+    // It's actually 45 seconds until it starts to close
+    // but we consider 60 seconds as the timeframe to enter
     closed: add(now, {seconds: 60}).toISOString(),
-    timeout: 'PT60S' // Didn't count yet but I suspect a 60 seconds period
+    timeout: 'PT60S'
   })
 }))
 
@@ -201,7 +197,7 @@ if (process.env.OAUTH_ENABLED === '1') {
   setupPassport()
   app.use('/api/auth', authRouter())
 } else {
-  console.warn('Warning: OAuth is disabled. Users will not be to login by themself.')
+  console.warn('Warning: OAuth is disabled. Users will not be able to login by themself.')
 }
 
 app.use(errorHandler)
