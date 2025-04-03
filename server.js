@@ -55,6 +55,7 @@ import {
   updateMemberBadge,
   updateMemberCapabilities,
   updateMemberMacAddresses,
+  addMemberTicketsOrder,
   updateMemberMembership,
   updateMemberSubscription,
   updateMemberTicketsOrder,
@@ -120,6 +121,7 @@ app.post('/api/members/:userId/activity', express.json(), w(multiAuth), w(ensure
 app.put('/api/members/:userId/activity/:date', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberActivity))
 
 app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTicketsOrders))
+app.post('/api/members/:userId/tickets', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberTicketsOrder))
 app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberTicketsOrder))
 app.delete('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberTicketsOrder))
 
