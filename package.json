@@ -8,6 +8,7 @@
     "start": "node server",
     "dev": "nodemon server",
     "lint": "xo",
+    "lint:format": "xo --fix",
     "test": "ava"
   },
   "dependencies": {
