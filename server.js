@@ -17,6 +17,7 @@ import {validateAndParseJson} from './lib/util/woocommerce.js'
 
 import statsRoutes from './lib/routes/stats.js'
 import onPremiseRoutes from './lib/routes/on-premise.js'
+import devicesRoutes from './lib/routes/devices.js'
 
 import * as Member from './lib/models/member.js'
 
@@ -41,7 +42,7 @@ import {
   getUsersStats,
   getCurrentMembers,
   getVotingMembers,
-  getMemberMacAddressesDetails,
+  getMemberDevices,
   updateMemberMacAddresses,
   updateMemberSubscription,
   getMemberAuditTrail,
@@ -114,11 +115,14 @@ app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
 app.post('/api/members/:userId/memberships', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberMembership))
 app.put('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberMembership))
-app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
 app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(getMemberCapabilities))
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
-app.get('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(getMemberMacAddressesDetails))
+app.use('/api/members/:userId/devices', w(multiAuth), w(ensureAccess), devicesRoutes)
+
+/* Deprecated */
+app.get('/api/members/:userId/mac-addresses', w(multiAuth), w(ensureAccess), w(getMemberDevices))
+app.put('/api/members/:userId/mac-addresses', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMacAddresses))
 
 app.get('/api/voting-members', w(multiAuth), w(ensureAdmin), w(getVotingMembers))
 app.get('/api/users-stats', w(multiAuth), w(ensureAdmin), w(getUsersStats))
