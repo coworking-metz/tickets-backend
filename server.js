@@ -52,7 +52,8 @@ import {
   getMemberCapabilities,
   updateMemberActivity,
   updateMemberMembership,
-  addMemberMembership
+  addMemberMembership,
+  addMemberActivity
 } from './lib/api.js'
 
 import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
@@ -107,6 +108,7 @@ app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
 app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberAuditTrail))
 app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
+app.post('/api/members/:userId/activity', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberActivity))
 app.put('/api/members/:userId/activity/:date', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberActivity))
 app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTickets))
 app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberTicket))
