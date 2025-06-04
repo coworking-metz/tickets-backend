@@ -84,7 +84,7 @@ To properly configure auth, here are the following environment variables to set:
 
 ### Calendar events
 
-To retrieve events from a iCal calendar, you can setup `CALENDAR_EVENTS_URL` which should provide events in the [`ics`](https://en.wikipedia.org/wiki/ICalendar) format.
+To retrieve events from a iCal calendar, you can setup `COWORKING_CALENDAR_URL` which should provide events in the [`ics`](https://en.wikipedia.org/wiki/ICalendar) format.
 
 ## Start the project
 
