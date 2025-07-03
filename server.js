@@ -49,6 +49,8 @@ import {
   getAllAuditEvents,
   updateMemberTicket,
   updateMemberCapabilities,
+  getMemberMeta,
+  updateMemberMeta,
   getMemberCapabilities,
   updateMemberActivity,
   updateMemberMembership,
@@ -119,6 +121,8 @@ app.post('/api/members/:userId/memberships', express.json(), w(multiAuth), w(ens
 app.put('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberMembership))
 app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(getMemberCapabilities))
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
+app.get('/api/members/:userId/meta/:metaKey', w(multiAuth), w(ensureAdmin), w(getMemberMeta))
+app.put('/api/members/:userId/meta/:metaKey', express.json(), w(multiAuth), w(ensureAccess), w(updateMemberMeta))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 app.use('/api/members/:userId/devices', w(multiAuth), w(ensureAccess), devicesRoutes)
 
