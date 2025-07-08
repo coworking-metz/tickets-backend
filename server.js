@@ -155,6 +155,15 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
     throw createHttpError(403, 'Accès insuffisant pour déverrouiller la porte')
   }
 
+  const hourStart = Number.parseInt(process.env.GATE_OPEN_HOUR_START || '7', 10)
+  const hourEnd = Number.parseInt(process.env.GATE_OPEN_HOUR_END || '23', 10)
+  const now = new Date()
+  const currentHour = now.getHours()
+
+  if (currentHour < hourStart || currentHour >= hourEnd) {
+    throw createHttpError(403, `Interphone désactivé entre ${hourEnd}h et ${hourStart}h`)
+  }
+
   await pressIntercomButton().catch(error => {
     notifyOnSignal(`Impossible d'appuyer sur l'interphone :\n${error.message}`)
       .catch(notifyError => {
@@ -166,7 +175,6 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
 
   logAuditTrail(req.user, 'UNLOCK_GATE')
 
-  const now = new Date()
   res.send({
     triggered: now.toISOString(),
     locked: add(now, {seconds: 3}).toISOString(),
