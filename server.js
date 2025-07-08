@@ -6,6 +6,7 @@ import process from 'node:process'
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
+import {utcToZonedTime} from 'date-fns-tz'
 import {add} from 'date-fns'
 import createHttpError from 'http-errors'
 
@@ -157,8 +158,10 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
 
   const hourStart = Number.parseInt(process.env.GATE_OPEN_HOUR_START || '7', 10)
   const hourEnd = Number.parseInt(process.env.GATE_OPEN_HOUR_END || '23', 10)
+
   const now = new Date()
-  const currentHour = now.getHours()
+  const nowParis = utcToZonedTime(now, 'Europe/Paris')
+  const currentHour = nowParis.getHours()
 
   if (currentHour < hourStart || currentHour >= hourEnd) {
     throw createHttpError(403, `Interphone désactivé entre ${hourEnd}h et ${hourStart}h`)
@@ -167,7 +170,6 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
   await pressIntercomButton().catch(error => {
     notifyOnSignal(`Impossible d'appuyer sur l'interphone :\n${error.message}`)
       .catch(notifyError => {
-        // Don't throw an error if the notification failed
         console.error('Unable to notify about /parking error', notifyError)
       })
     throw error
