@@ -164,7 +164,7 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
   const currentHour = nowParis.getHours()
 
   if (currentHour < hourStart || currentHour >= hourEnd) {
-    throw createHttpError(403, `Interphone désactivé entre ${hourEnd}h et ${hourStart}h`)
+    throw createHttpError(403, `Le déverouillage de la porte n'est autorisé que de ${`${hourStart}`.padStart(2, '0')}h à ${`${hourEnd}`.padStart(2, '0')}h`)
   }
 
   await pressIntercomButton().catch(error => {
