@@ -156,6 +156,8 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
     throw createHttpError(403, 'Accès insuffisant pour déverrouiller la porte')
   }
 
+  throw createHttpError(503, 'Le déverrouillage de la porte est indisponible car Matthieu a fait une bourde.\nSincèrement désolé 😔')
+
   const hourStart = Number.parseInt(process.env.GATE_OPEN_HOUR_START || '7', 10)
   const hourEnd = Number.parseInt(process.env.GATE_OPEN_HOUR_END || '23', 10)
 
