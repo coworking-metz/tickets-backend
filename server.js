@@ -3,68 +3,70 @@ import 'dotenv/config.js'
 
 import process from 'node:process'
 
-import express from 'express'
 import cors from 'cors'
-import morgan from 'morgan'
-import {utcToZonedTime} from 'date-fns-tz'
 import {add} from 'date-fns'
+import {utcToZonedTime} from 'date-fns-tz'
+import express from 'express'
 import createHttpError from 'http-errors'
+import morgan from 'morgan'
 
-import mongo from './lib/util/mongo.js'
-import w from './lib/util/w.js'
 import errorHandler from './lib/util/error-handler.js'
+import mongo from './lib/util/mongo.js'
 import {setupPassport} from './lib/util/passport.js'
+import w from './lib/util/w.js'
 import {validateAndParseJson} from './lib/util/woocommerce.js'
 
-import statsRoutes from './lib/routes/stats.js'
-import onPremiseRoutes from './lib/routes/on-premise.js'
 import devicesRoutes from './lib/routes/devices.js'
+import onPremiseRoutes from './lib/routes/on-premise.js'
+import statsRoutes from './lib/routes/stats.js'
 
 import * as Member from './lib/models/member.js'
 
 import cache from './lib/util/cache.js'
 
 import {
-  coworkersNow,
-  getAllMembers,
-  getMemberInfos,
-  getMemberActivity,
-  getMemberTickets,
-  getMemberSubscriptions,
-  getMemberMemberships,
-  heartbeat,
-  getMacAddressesLegacy,
-  updatePresence,
-  getFlag,
-  purchaseWebhook,
-  presenceWebhook,
-  syncUserWebhook,
-  forceWordpressSync,
-  getUsersStats,
-  getCurrentMembers,
-  getVotingMembers,
-  getMemberDevices,
-  updateMemberMacAddresses,
-  updateMemberSubscription,
-  getMemberAuditTrail,
-  getAllAuditEvents,
-  updateMemberTicket,
-  updateMemberCapabilities,
-  getMemberCapabilities,
-  updateMemberActivity,
-  updateMemberMembership,
-  addMemberMembership,
   addMemberActivity,
-  updateMemberBadge
+  addMemberMembership,
+  coworkersNow,
+  forceWordpressSync,
+  getAllAuditEvents,
+  getAllMembers,
+  getCurrentMembers,
+  getFlag,
+  getMacAddressesLegacy,
+  getMemberActivity,
+  getMemberAuditTrail,
+  getMemberCapabilities,
+  getMemberDevices,
+  getMemberInfos,
+  getMemberMemberships,
+  getMemberSubscriptions,
+  getMemberTicketsOrders,
+  getUsersStats,
+  getVotingMembers,
+  heartbeat,
+  presenceWebhook,
+  purchaseWebhook,
+  removeMemberMembership,
+  removeMemberTicketsOrder,
+  syncUserWebhook,
+  updateMemberActivity,
+  updateMemberBadge,
+  updateMemberCapabilities,
+  updateMemberMacAddresses,
+  updateMemberMembership,
+  updateMemberSubscription,
+  updateMemberTicketsOrder,
+  updatePresence
 } from './lib/api.js'
 
-import {ensureToken, ensureAdmin, multiAuth, authRouter, ensureAccess} from './lib/auth.js'
-import {ping} from './lib/ping.js'
-import {precomputeStats} from './lib/stats.js'
-import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
-import {getAllEvents} from './lib/services/calendar.js'
+import {authRouter, ensureAccess, ensureAdmin, ensureToken, multiAuth} from './lib/auth.js'
 import {logAuditTrail} from './lib/models/audit.js'
+import {ping} from './lib/ping.js'
+import {getAllEvents} from './lib/services/calendar.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
+import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
+import {precomputeStats} from './lib/stats.js'
 
 await mongo.connect()
 await cache.load()
@@ -112,14 +114,16 @@ app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberA
 app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
 app.post('/api/members/:userId/activity', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberActivity))
 app.put('/api/members/:userId/activity/:date', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberActivity))
-app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTickets))
-app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberTicket))
+app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTicketsOrders))
+app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberTicketsOrder))
+app.delete('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberTicketsOrder))
 app.put('/api/members/:userId/badgeId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberBadge))
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
 app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberSubscription))
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
 app.post('/api/members/:userId/memberships', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberMembership))
 app.put('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberMembership))
+app.delete('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberMembership))
 app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(getMemberCapabilities))
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
