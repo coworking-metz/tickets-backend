@@ -48,6 +48,7 @@ import {
   presenceWebhook,
   purchaseWebhook,
   removeMemberMembership,
+  removeMemberSubscription,
   removeMemberTicketsOrder,
   syncUserWebhook,
   updateMemberActivity,
@@ -111,19 +112,25 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
 app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberAuditTrail))
+
 app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
 app.post('/api/members/:userId/activity', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberActivity))
 app.put('/api/members/:userId/activity/:date', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberActivity))
+
 app.get('/api/members/:userId/tickets', w(multiAuth), w(ensureAccess), w(getMemberTicketsOrders))
 app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberTicketsOrder))
 app.delete('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberTicketsOrder))
-app.put('/api/members/:userId/badgeId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberBadge))
+
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
 app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberSubscription))
+app.delete('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberSubscription))
+
 app.get('/api/members/:userId/memberships', w(multiAuth), w(ensureAccess), w(getMemberMemberships))
 app.post('/api/members/:userId/memberships', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberMembership))
 app.put('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberMembership))
 app.delete('/api/members/:userId/memberships/:membershipId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberMembership))
+
+app.put('/api/members/:userId/badgeId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberBadge))
 app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(getMemberCapabilities))
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
