@@ -42,7 +42,6 @@ import {
   getMemberMemberships,
   getMemberSubscriptions,
   getMemberTicketsOrders,
-  getUserAccessToken,
   getUsersStats,
   getVotingMembers,
   heartbeat,
@@ -136,8 +135,6 @@ app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(get
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 app.use('/api/members/:userId/devices', w(multiAuth), w(ensureAccess), devicesRoutes)
-
-app.post('/api/members/:userId/impersonate', express.json(), w(multiAuth), w(ensureAdmin), w(getUserAccessToken))
 
 /* Deprecated */
 app.get('/api/members/:userId/mac-addresses', w(multiAuth), w(ensureAccess), w(getMemberDevices))
