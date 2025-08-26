@@ -65,8 +65,7 @@ import {authRouter, ensureAccess, ensureAdmin, ensureToken, multiAuth} from './l
 import {logAuditTrail} from './lib/models/audit.js'
 import {ping} from './lib/ping.js'
 import {getAllEvents} from './lib/services/calendar.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
-import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, phoneCallParkingBarrier, pressIntercomButton} from './lib/services/home-assistant.js'
 import {precomputeStats} from './lib/stats.js'
 
 await mongo.connect()
@@ -200,7 +199,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
     throw createHttpError(403, 'Accès insuffisant pour ouvrir la barrière')
   }
 
-  await pressRemoteButton().catch(error => {
+  await phoneCallParkingBarrier().catch(error => {
     notifyOnSignal(`Impossible d'ouvrir la barrière du parking :\n${error.message}`)
       .catch(notifyError => {
         // Don't throw an error if the notification failed
