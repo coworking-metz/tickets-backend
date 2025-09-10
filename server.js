@@ -68,6 +68,7 @@ import {getAllEvents} from './lib/services/calendar.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
 import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {precomputeStats} from './lib/stats.js'
+import {logListenUrls} from './lib/util/tools.js'
 
 await mongo.connect()
 await cache.load()
@@ -248,7 +249,7 @@ app.use(errorHandler)
 const port = process.env.PORT || 8000
 
 app.listen(port, () => {
-  console.log(`Start listening on port ${port}!`)
+  logListenUrls(port)
 })
 
 // Précalcul des données
