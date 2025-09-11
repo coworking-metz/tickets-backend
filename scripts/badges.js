@@ -16,14 +16,14 @@ const STATE_FILE = path.join(os.tmpdir(), 'coworking-badge-export.state')
 const AUDIT_COLLECTION = 'audit'
 await mongo.connect()
 
-if (process.argv.includes('--all')) {
+const sendAll = Boolean(process.argv.includes('--all'))
+
+if (sendAll) {
   try {
     await fs.unlink(STATE_FILE)
     console.log('Fichier d’état supprimé (--all)')
   } catch {}
 }
-
-console.log({STATE_FILE})
 
 let lastRun = new Date(0)
 try {
@@ -40,14 +40,21 @@ const events = await getAuditEvents({
   since: lastRun
 })
 const now = new Date()
+// ... reste du script identique au début
+
 if (events.length > 0) {
   const html = []
   const badges = []
   const relevantEvents = []
+  const csvRows = [['badgeId', 'decimalId', 'firstName', 'lastName', 'date']]
 
   for (const event of events) {
     const {badgeId, emailSent} = event.context
-    if (emailSent || badges.includes(badgeId)) {
+    if (emailSent && !sendAll) {
+      continue
+    }
+
+    if (badges.includes(badgeId)) {
       continue
     }
 
@@ -61,7 +68,11 @@ if (events.length > 0) {
       continue
     }
 
-    html.push(`<strong>${badgeId} / ${uidToDecimalLittleEndian(badgeId)}</strong> : ${member.firstName} ${member.lastName} (${formatDate(event.occurred)})`)
+    const decimalId = uidToDecimalLittleEndian(badgeId)
+    const formattedDate = formatDate(event.occurred)
+
+    html.push(`<strong>${badgeId} / ${decimalId}</strong> : ${member.firstName} ${member.lastName} (${formattedDate})`)
+    csvRows.push([badgeId, decimalId, member.firstName, member.lastName, formattedDate])
   }
 
   if (badges.length === 0) {
@@ -70,19 +81,27 @@ if (events.length > 0) {
     const message = `
 Bonjour,
 
-Voici les identifiants de badges coworking envoyés depuis le ${lastRun.toLocaleString('fr-FR')} :
-
-${'\t' + html.join('\n\t')}
+Voici les identifiants de badges coworking envoyés depuis le ${lastRun.toLocaleString('fr-FR')} en pièce jointe
 
 Cordialement,
 Coworking Metz
 `
 
-    // Envoi du mail
+    // Génération du CSV
+    const csvContent = csvRows.map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
+
+    // Envoi du mail avec pièce jointe
     await sendMail(
       {
         subject: 'Nouveaux badges membres',
-        text: message
+        text: message,
+        attachments: [
+          {
+            filename: `badges-${now.toISOString().slice(0, 10)}.csv`,
+            content: csvContent,
+            contentType: 'text/csv'
+          }
+        ]
       },
       [process.env.BADGE_EMAIL_ADDRESS]
     )
