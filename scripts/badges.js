@@ -58,15 +58,15 @@ if (events.length > 0) {
       continue
     }
 
-    badges.push(badgeId)
-    relevantEvents.push(event)
-
     const member = await getMemberByBadgeId(badgeId) // eslint-disable-line no-await-in-loop
 
     if (!member) {
-      console.warn('Membre non trouvé pour ' + badgeId, event)
+      console.warn('Membre non trouvé pour ' + badgeId + ' en savoir plus : https://manager.coworking-metz.fr/history?search=' + event._id)
       continue
     }
+
+    badges.push(badgeId)
+    relevantEvents.push(event)
 
     const decimalId = uidToDecimalLittleEndian(badgeId)
     const formattedDate = formatDate(event.occurred)
