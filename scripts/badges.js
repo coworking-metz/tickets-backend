@@ -56,6 +56,11 @@ if (events.length > 0) {
 
     const member = await getMemberByBadgeId(badgeId) // eslint-disable-line no-await-in-loop
 
+    if (!member) {
+      console.warn('Membre non trouvé pour ' + badgeId, event)
+      continue
+    }
+
     html.push(`<strong>${badgeId} / ${uidToDecimalLittleEndian(badgeId)}</strong> : ${member.firstName} ${member.lastName} (${formatDate(event.occurred)})`)
   }
 
