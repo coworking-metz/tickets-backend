@@ -43,13 +43,16 @@ const now = new Date()
 // ... reste du script identique au début
 
 if (events.length > 0) {
-  const html = []
   const badges = []
   const relevantEvents = []
   const csvRows = [['badgeId', 'decimalId', 'firstName', 'lastName', 'date']]
 
   for (const event of events) {
     const {badgeId, emailSent} = event.context
+    if (!badgeId || Number.isNaN(badgeId)) {
+      continue
+    }
+
     if (emailSent && !sendAll) {
       continue
     }
@@ -70,8 +73,6 @@ if (events.length > 0) {
 
     const decimalId = uidToDecimalLittleEndian(badgeId)
     const formattedDate = formatDate(event.occurred)
-
-    html.push(`<strong>${badgeId} / ${decimalId}</strong> : ${member.firstName} ${member.lastName} (${formattedDate})`)
     csvRows.push([badgeId, decimalId, member.firstName, member.lastName, formattedDate])
   }
 
