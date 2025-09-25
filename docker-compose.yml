@@ -33,6 +33,16 @@ services:
       ROUNDCUBEMAIL_SMTP_SERVER: greenmail   # SMTP server
       ROUNDCUBEMAIL_SMTP_PORT: 3025          # SMTP port
 
+  # mock external services, like Home Assistant, Shelly and others
+  mockoon:
+    container_name: tickets-backend-mockoon
+    image: mockoon/cli:9.3.0
+    entrypoint: >
+      mockoon-cli start -d /mock.json --port=3001 -l 0.0.0.0
+    ports:
+      - "33001:3001"
+    volumes:
+      - "./mock/mockoon.json:/mock.json"
 
 volumes:
   mongodb_data:

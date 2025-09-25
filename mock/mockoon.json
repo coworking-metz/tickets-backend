@@ -1,0 +1,358 @@
+{
+  "uuid": "3d99de13-9b23-4204-9a2b-3b79f2ca8f71",
+  "lastMigration": 33,
+  "name": "tickets-backend external services",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [
+    {
+      "uuid": "3c052b0d-bcf2-478f-8df2-550de3f2c6c2",
+      "name": "Home Assistant",
+      "children": [
+        {
+          "type": "route",
+          "uuid": "6618f607-5fe3-4708-baba-a78c0b557b8d"
+        },
+        {
+          "type": "route",
+          "uuid": "fc2a35c1-c322-4823-8501-73ec46e23741"
+        },
+        {
+          "type": "route",
+          "uuid": "c7eb6802-079c-4bc6-b894-67234053a402"
+        },
+        {
+          "type": "route",
+          "uuid": "5c95dc92-532a-4e9a-a145-4c3fa50526c0"
+        },
+        {
+          "type": "route",
+          "uuid": "65309de7-7760-4e5e-8399-9ca99a8b454c"
+        }
+      ]
+    },
+    {
+      "uuid": "e486213a-8460-4755-afa8-6904a3dddb9a",
+      "name": "Shelly",
+      "children": [
+        {
+          "type": "route",
+          "uuid": "62e0dd24-eb71-4ac3-b7a7-fa607e055879"
+        },
+        {
+          "type": "route",
+          "uuid": "3b8395af-0fcd-40d6-9aed-539e2099e504"
+        }
+      ]
+    },
+    {
+      "uuid": "995a1310-9db4-4712-ad26-d1ca0662b4a9",
+      "name": "Gemini",
+      "children": []
+    }
+  ],
+  "routes": [
+    {
+      "uuid": "6618f607-5fe3-4708-baba-a78c0b557b8d",
+      "type": "http",
+      "documentation": "Get state of watched entities",
+      "method": "get",
+      "endpoint": "home-assistant/api/states/",
+      "responses": [
+        {
+          "uuid": "d99d7d74-53ef-4442-b960-294f39fee824",
+          "body": "[\n  {\n    \"entity_id\": \"binary_sensor.orange_telephone_booth_occupied\",\n    \"state\": \"off\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"Orange telephone booth occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.blue_telephone_booth_occupied\",\n    \"state\": \"on\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"Blue telephone booth occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.flexispot_a_occupied\",\n    \"state\": \"off\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"FlexiSpot A occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.flexispot_b_occupied\",\n    \"state\": \"off\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"FlexiSpot B occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_temperature\",\n    \"state\": \"20\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"°C\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"temperature\",\n      \"friendly_name\": \"Netatmo Station Big Température\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_co2\",\n    \"state\": \"1247\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"ppm\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"carbon_dioxide\",\n      \"friendly_name\": \"Netatmo Station Big Dioxyde de carbone\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_noise\",\n    \"state\": \"42\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"dB\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"sound_pressure\",\n      \"friendly_name\": \"Netatmo Station Big Bruit\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_humidity\",\n    \"state\": \"61\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"%\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"humidity\",\n      \"friendly_name\": \"Netatmo Station Big Humidité\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_small_temperature\",\n    \"state\": \"20\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"°C\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"temperature\",\n      \"friendly_name\": \"Netatmo Station Small Température\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_small_humidity\",\n    \"state\": \"61\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"%\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"humidity\",\n      \"friendly_name\": \"Netatmo Station Small Humidité\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"lock.porte_de_la_terrasse\",\n    \"state\": \"locked\",\n    \"attributes\": {\n      \"friendly_name\": \"Porte de la terrasse\",\n      \"supported_features\": 0\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  }\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "c7eb6802-079c-4bc6-b894-67234053a402",
+      "type": "http",
+      "documentation": "Press intercom button",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/button/press",
+      "responses": [
+        {
+          "uuid": "7d1830d9-d749-4020-8aa7-7e739840796b",
+          "body": "[\"{{ now }}\"]",
+          "latency": 1000,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "entity_id",
+              "value": "button.intercom_unlock_door",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "5c95dc92-532a-4e9a-a145-4c3fa50526c0",
+      "type": "http",
+      "documentation": "Notify on Signal IT group",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/notify/signal",
+      "responses": [
+        {
+          "uuid": "06844734-6ee0-4b40-8451-2b73eaba5f52",
+          "body": "",
+          "latency": 0,
+          "statusCode": 204,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "fc2a35c1-c322-4823-8501-73ec46e23741",
+      "type": "http",
+      "documentation": "Get state of entities since a date",
+      "method": "get",
+      "endpoint": "home-assistant/api/history/period/:since",
+      "responses": [
+        {
+          "uuid": "fdaa5d2d-bb93-4532-a072-35afcdc4cdc2",
+          "body": "[\n  [\n    {\n      \"entity_id\": \"binary_sensor.blue_telephone_booth_occupied\",\n      \"state\": \"unknown\",\n      \"attributes\": {},\n      \"last_changed\": \"2025-09-15T03:21:30.773688+00:00\",\n      \"last_updated\": \"2025-09-15T03:21:30.773688+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T03:21:54.315171+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T07:28:38.478258+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T11:55:27.175117+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T12:28:59.506792+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T14:25:07.640279+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T15:57:43.147588+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T15:59:13.225669+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T17:48:19.340821+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T18:30:21.736700+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T07:01:05.538832+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T08:04:40.253930+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T08:07:40.616164+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T08:56:14.226763+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T09:02:44.673726+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T10:10:19.901344+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T12:39:29.782650+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T13:26:03.264109+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T14:00:35.779408+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T14:34:38.672345+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T15:18:11.406573+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T15:34:12.341721+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-17T02:35:53.420662+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T02:36:12.851584+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T07:42:37.992276+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T07:46:08.215332+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T08:00:39.108031+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T08:22:40.483803+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T08:29:10.933795+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T08:44:42.002867+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T09:00:13.247540+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T09:17:44.338581+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T09:29:15.271909+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T09:34:15.635237+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T09:39:15.979434+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T09:45:16.342442+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T10:36:19.621388+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T15:06:11.037230+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T15:11:41.366191+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T15:31:42.820101+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T15:59:44.547740+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T17:10:19.035432+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T17:42:20.928279+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T17:42:50.963823+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-18T02:44:08.707656+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T02:44:44.721974+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-18T05:46:50.877201+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T05:47:13.746045+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T07:15:04.199904+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T08:33:39.492292+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T08:51:40.719200+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T09:15:12.550590+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T09:31:13.620841+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T10:07:16.129361+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T10:08:46.230425+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T10:53:52.890272+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T11:44:27.551557+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T14:21:12.706001+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T08:02:18.232109+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T08:49:51.693936+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T12:22:48.481144+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T13:11:26.020923+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T13:21:56.863895+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T13:32:59.887398+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-20T07:27:41.942324+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T07:28:11.342084+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-21T11:15:42.758199+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-21T11:16:15.537685+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T07:01:13.945179+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T07:17:14.919204+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T08:01:17.740066+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T08:23:19.189775+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T08:55:26.366169+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T08:57:56.509633+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T08:59:56.631901+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T10:16:34.158057+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T10:57:08.568438+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T11:11:40.161372+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T13:35:15.043134+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T14:11:18.208219+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T06:58:03.251364+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T08:17:42.194167+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T08:59:45.285745+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T10:13:50.151691+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T13:58:36.034882+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T16:12:47.104578+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T08:00:14.115875+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T09:47:57.205881+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T12:02:26.208950+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T13:49:41.714618+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T14:30:19.165973+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T15:05:53.960240+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T07:28:28.318832+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T07:38:40.777799+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T08:00:20.066248+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T08:25:51.993598+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T08:57:01.276194+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T10:30:28.698898+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T10:54:30.643854+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T11:57:35.194402+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T12:16:36.421339+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T12:51:11.195648+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T13:00:44.010312+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T13:31:16.356621+00:00\" }\n  ],\n  [\n    {\n      \"entity_id\": \"binary_sensor.orange_telephone_booth_occupied\",\n      \"state\": \"unknown\",\n      \"attributes\": {},\n      \"last_changed\": \"2025-09-15T03:21:30.765838+00:00\",\n      \"last_updated\": \"2025-09-15T03:21:30.765838+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T03:21:54.313931+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T06:55:06.369712+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T07:12:37.507792+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T08:04:41.889125+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T09:03:15.898376+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T11:58:28.737640+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T13:13:03.799592+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T13:46:35.907935+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T13:48:05.991188+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T14:39:39.132329+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T15:00:10.382262+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-15T18:40:22.917945+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-15T18:40:52.952244+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T07:12:05.621647+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T10:25:19.970662+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T12:15:57.484886+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T12:16:27.512732+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T12:21:57.845589+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T13:17:01.446275+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T13:44:03.371785+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T14:15:05.867692+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T18:17:50.812536+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T18:18:20.850750+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-16T19:22:54.413165+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-16T19:23:24.444797+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-17T02:35:53.412144+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T02:36:12.850278+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T08:13:42.751439+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T08:32:44.074556+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T08:39:14.499340+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T08:49:15.181770+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T09:02:45.966634+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T12:59:42.926054+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T13:00:43.002208+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T15:51:27.783683+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T16:44:30.823538+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T16:45:00.864841+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T17:28:33.498254+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T17:29:03.527900+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T18:50:08.202961+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T18:50:38.226594+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-17T20:25:43.646187+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-17T20:26:13.679758+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-18T02:44:08.699752+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T02:44:44.720798+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-18T05:46:50.869200+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T05:47:13.744777+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T06:29:59.563099+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T06:30:29.589733+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T07:33:03.493813+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T08:03:35.701265+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T08:12:06.355133+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T08:25:37.268101+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T08:29:07.506443+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T08:45:38.502720+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T08:57:09.393319+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T10:03:14.000054+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T12:28:57.470421+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T12:34:57.872708+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T12:38:28.119992+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T13:50:02.857764+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-18T19:55:57.849305+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-18T19:56:27.871736+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T06:31:35.296842+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T06:32:05.329042+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T07:39:39.664863+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T07:40:09.694978+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T07:55:40.635080+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T09:30:16.569870+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T09:42:47.340804+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T09:43:17.364690+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T12:26:59.087152+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T13:28:33.597088+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T16:19:14.359732+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T16:22:14.527969+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T17:17:17.648631+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T17:17:47.670911+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T17:18:17.704896+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T17:19:17.763606+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T17:34:48.667871+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T17:35:18.703778+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T19:05:23.714134+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T19:05:53.737365+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-19T20:28:28.306714+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-19T20:28:58.330026+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-20T06:31:31.882175+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T06:32:01.957615+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-20T06:50:03.027369+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T06:50:33.049415+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-20T07:27:41.927615+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T07:28:11.336928+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-20T08:05:52.629608+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T08:06:22.660827+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-20T08:32:24.236410+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T08:32:54.266873+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-20T11:15:04.313585+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-20T11:15:34.336670+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-21T06:31:04.219518+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-21T06:31:34.249616+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-21T07:08:36.922962+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-21T07:09:06.944805+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-21T10:35:21.663710+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-21T10:35:51.698296+00:00\" },\n    {\n      \"state\": \"unknown\",\n      \"last_changed\": \"2025-09-21T11:15:42.750434+00:00\"\n    },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-21T11:16:15.536044+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-21T20:51:35.392847+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-21T20:52:05.558184+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T06:42:11.927624+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T06:42:41.951694+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T07:01:43.028804+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T07:57:46.641366+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T09:00:20.565989+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T12:49:08.792612+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T12:49:38.824114+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T16:02:24.286062+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-22T16:46:27.451583+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-22T16:46:57.483632+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T06:00:52.511561+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T06:01:22.539251+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T06:46:25.653893+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T06:46:55.701262+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T07:17:57.978919+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T08:27:05.506006+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T08:59:37.771297+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T10:12:42.337237+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T11:06:15.915756+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T11:06:45.941804+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T11:16:16.676146+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T11:16:46.701703+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T16:19:37.423945+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T16:20:07.450233+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T17:35:41.603430+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T17:36:11.625712+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T18:34:44.892308+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T18:35:14.923378+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T18:55:16.042658+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T18:55:46.077744+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-23T20:03:20.190786+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-23T20:03:50.223214+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T06:41:03.995024+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T06:41:34.046814+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T07:00:35.406576+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T07:01:05.442979+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T08:31:15.552425+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T09:52:21.281754+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T11:53:58.885004+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T13:16:04.895984+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T13:36:06.437681+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T14:01:38.032790+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T15:03:41.794394+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T15:25:43.104113+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T20:29:59.990799+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T20:30:30.023148+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-24T22:19:06.367591+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-24T22:19:36.399462+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T08:01:36.744108+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T09:03:41.610888+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T10:02:15.658148+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T11:34:52.229397+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T11:41:22.610949+00:00\" },\n    { \"state\": \"off\", \"last_changed\": \"2025-09-25T12:56:57.796751+00:00\" },\n    { \"state\": \"on\", \"last_changed\": \"2025-09-25T12:59:57.984051+00:00\" }\n  ]\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "filter_entity_id",
+              "value": "binary_sensor.blue_telephone_booth_occupied,binary_sensor.orange_telephone_booth_occupied",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "65309de7-7760-4e5e-8399-9ca99a8b454c",
+      "type": "http",
+      "documentation": "Unlock deck door",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/lock/unlock",
+      "responses": [
+        {
+          "uuid": "9bb85ad9-c3c0-429d-b98e-b101e86d7041",
+          "body": "[\"{{ now }}\"]",
+          "latency": 1000,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "entity_id",
+              "value": "lock.porte_de_la_terrasse",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "62e0dd24-eb71-4ac3-b7a7-fa607e055879",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "shelly/device/status",
+      "responses": [
+        {
+          "uuid": "80376fdb-b31c-4bf6-85bc-a0715fa82c56",
+          "body": "{ \"isok\": true, \"data\": { \"online\": true } }",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "3b8395af-0fcd-40d6-9aed-539e2099e504",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "shelly/device/relay/control",
+      "responses": [
+        {
+          "uuid": "021cad7d-95d2-4b9a-8840-39fe3a3e77de",
+          "body": "{ \"isok\": true, \"data\": { \"device_id\": \"d4d4da7d1a18\" } }",
+          "latency": 1000,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "folder",
+      "uuid": "3c052b0d-bcf2-478f-8df2-550de3f2c6c2"
+    },
+    {
+      "type": "folder",
+      "uuid": "e486213a-8460-4755-afa8-6904a3dddb9a"
+    },
+    {
+      "type": "folder",
+      "uuid": "995a1310-9db4-4712-ad26-d1ca0662b4a9"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}
