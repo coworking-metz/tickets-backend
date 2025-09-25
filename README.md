@@ -48,7 +48,8 @@ docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude="ticket
 
 To enable parking remote feature, you must define `SHELLY_TOKEN` (authentication key from your Shelly Cloud or Shelly local account), `SHELLY_SERVER` (URL to Shelly Cloud server or your local device) and `SHELLY_PARKING_REMOTE_DEVICE` (device id) in your environment. We assume everything is already configured and output is on channel 0.
 
-:warning: When you change your Shelly account password, your authentication key is refreshed.
+> [!WARNING]
+> When you change your Shelly account password, your authentication key is refreshed.
 
 ### Set up Home Assistant
 
@@ -81,6 +82,16 @@ To properly configure auth, here are the following environment variables to set:
 - `JWT_REFRESH_TOKEN_PRIVATE_KEY`: anything you want, as long as you don't tell anyone.
 - `JWT_REFRESH_TOKEN_EXPIRATION_TIME`: how long an refresh token should live. In the [zeit/ms](https://github.com/zeit/ms.js) format. Default to `30d`.
 - `JWT_REFRESH_TOKEN_SECRET_KEY`: anything you want with at least 32 characters. Like it says in the name, keep it secret.
+
+### Mock external services
+
+In case you don't want to setup external services, you can set environment variables to point to
+[`mockoon`](https://mockoon.com) which is started through `docker-compose`.
+
+```bash
+HOME_ASSISTANT_BASE_URL=http://localhost:33001/home-assistant
+SHELLY_SERVER=http://localhost:33001/shelly
+```
 
 ### Calendar events
 

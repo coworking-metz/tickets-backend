@@ -1,12 +1,12 @@
 {
-  "name": "@coworking-metz/tickets-stats",
+  "name": "@coworking-metz/tickets-backend",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
+    "dev": "nodemon --ignore 'mock/*.json' server",
     "lint": "xo",
     "lint:format": "xo --fix",
     "test": "ava"
