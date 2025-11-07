@@ -201,14 +201,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
     throw createHttpError(403, 'Accès insuffisant pour ouvrir la barrière')
   }
 
-  await pressRemoteButton().catch(error => {
-    notifyOnSignal(`Impossible d'ouvrir la barrière du parking :\n${error.message}`)
-      .catch(notifyError => {
-        // Don't throw an error if the notification failed
-        console.error('Unable to notify about /parking error', notifyError)
-      })
-    throw error
-  })
+  await pressRemoteButton()
 
   logAuditTrail(req.user, 'PARKING_ACCESS')
 
