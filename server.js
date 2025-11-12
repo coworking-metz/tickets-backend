@@ -34,9 +34,9 @@ import {
   getCurrentMembers,
   getFlag,
   getMacAddressesLegacy,
-  getMemberActivity,
   getMemberAuditTrail,
   getMemberCapabilities,
+  getMemberComputedActivity,
   getMemberDevices,
   getMemberInfos,
   getMemberMemberships,
@@ -114,7 +114,7 @@ app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
 app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberAuditTrail))
 
-app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivity))
+app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberComputedActivity))
 app.post('/api/members/:userId/activity', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberActivity))
 app.put('/api/members/:userId/activity/:date', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberActivity))
 
