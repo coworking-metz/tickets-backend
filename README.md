@@ -40,8 +40,9 @@ start a new one through Docker prior importing the archive:
 docker-compose up -d
 ```
 
+The following script will fetch, clean and restore your local database from a production backup:
 ```bash
-docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude="tickets.*" --archive < /Users/whatever/2023-09-01-12-00-01-mongo-tickets.mongoarchive
+npm run database:sync
 ```
 
 ### Set up parking remote (Shelly)
