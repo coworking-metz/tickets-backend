@@ -36,7 +36,7 @@ import {
   getMacAddressesLegacy,
   getMemberAuditTrail,
   getMemberCapabilities,
-  getMemberComputedActivity,
+  getMemberActivityCoverage,
   getMemberDevices,
   getMemberInfos,
   getMemberMemberships,
@@ -114,7 +114,7 @@ app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
 app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
 app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberAuditTrail))
 
-app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberComputedActivity))
+app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivityCoverage))
 app.post('/api/members/:userId/activity', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberActivity))
 app.put('/api/members/:userId/activity/:date', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberActivity))
 
@@ -215,7 +215,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   })
 }))
 
-app.get('/netatmo/stations', w(async (req, res) => {
+app.get('/netatmo/stations', w(async (_req, res) => {
   const sensors = await getOpenSpaceSensorsFormattedAsNetatmo()
   res.send(sensors)
 }))
@@ -227,6 +227,10 @@ app.get('/api/calendar/events', w(multiAuth), w(getAllEvents))
 /* Util */
 
 app.get('/api/ping', w(ping))
+app.post('/api/cache/clear', w(async (_req, res) => {
+  await cache.clear()
+  res.sendStatus(204)
+}))
 
 /* Auth */
 
