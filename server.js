@@ -227,7 +227,7 @@ app.get('/api/calendar/events', w(multiAuth), w(getAllEvents))
 /* Util */
 
 app.get('/api/ping', w(ping))
-app.post('/api/cache/clear', w(async (_req, res) => {
+app.post('/api/cache/clear', w(multiAuth), w(ensureAdmin), w(async (_req, res) => {
   await cache.clear()
   res.sendStatus(204)
 }))
