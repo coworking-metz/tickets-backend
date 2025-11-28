@@ -25,6 +25,7 @@ import * as Member from './lib/models/member.js'
 import cache from './lib/util/cache.js'
 
 import {
+  addBooking,
   addMemberActivity,
   addMemberMembership,
   coworkersNow,
@@ -136,6 +137,10 @@ app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(get
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 app.use('/api/members/:userId/devices', w(multiAuth), w(ensureAccess), devicesRoutes)
+
+/** Bliiida bookings */
+// app.get('/api/bliiida_bookings/:userId/bookings', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
+app.put('/api/bliiida_bookings/:userId/bookings/:roomSlug', express.json(), w(multiAuth), w(addBooking))
 
 /* Deprecated */
 app.get('/api/members/:userId/mac-addresses', w(multiAuth), w(ensureAccess), w(getMemberDevices))
