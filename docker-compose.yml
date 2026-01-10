@@ -44,5 +44,18 @@ services:
     volumes:
       - "./mock/mockoon.json:/mock.json"
 
+  fake-scanner:
+    container_name: tickets-backend-fake-scanner
+    image: node:24-alpine
+    volumes:
+      - "./mock/fake-scanner.js:/fake-scanner.js"
+      - "./node_modules:/node_modules"
+    entrypoint: >
+      node /fake-scanner.js
+    env_file:
+      - .env
+    environment:
+      - API_BASE_URL=http://host.docker.internal:${PORT:-8000}
+
 volumes:
   mongodb_data:
