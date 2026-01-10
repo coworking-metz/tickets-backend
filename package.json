@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon --ignore 'mock/*.json' --ignore 'data/*.json' server",
-    "database:clean": "docker-compose down && docker volume rm tickets-backend_mongodb_data && docker-compose up -d",
+    "dev": "nodemon --ignore 'mock/*' --ignore 'data/*.json' server",
+    "database:clean": "docker-compose down && docker volume rm tickets-backend_mongodb_data --force && docker-compose up -d",
     "database:fetch": "mkdir -p ./archives/ && scp ubuntu@api.coworking-metz.fr://srv/backups/mongo-dumps/$(date +%Y-%m-%d)-00-00-01-mongo-tickets.mongoarchive.gz ./archives/",
     "database:restore": "docker exec -i tickets-backend-mongodb /usr/bin/mongorestore --nsInclude=\"tickets.*\" --gzip --archive < ./$(ls -1t archives/*.mongoarchive.gz | head -n 1)",
     "database:sync": "npm run database:fetch && npm run database:clean && npm run database:restore",
