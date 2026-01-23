@@ -51,6 +51,16 @@
       "uuid": "995a1310-9db4-4712-ad26-d1ca0662b4a9",
       "name": "Gemini",
       "children": []
+    },
+    {
+      "uuid": "4ad5c5da-e770-4690-bfca-2371ea1dd4cd",
+      "name": "Wordpress",
+      "children": [
+        {
+          "type": "route",
+          "uuid": "37e0ee28-689d-4e8f-a652-56dd63d52f08"
+        }
+      ]
     }
   ],
   "routes": [
@@ -294,6 +304,37 @@
       "responseMode": null,
       "streamingMode": null,
       "streamingInterval": 0
+    },
+    {
+      "uuid": "37e0ee28-689d-4e8f-a652-56dd63d52f08",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "wordpress/oauth/token",
+      "responses": [
+        {
+          "uuid": "35d51a32-dccd-4f50-94ef-80df0d399b3a",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "rootChildren": [
@@ -308,6 +349,10 @@
     {
       "type": "folder",
       "uuid": "995a1310-9db4-4712-ad26-d1ca0662b4a9"
+    },
+    {
+      "type": "folder",
+      "uuid": "4ad5c5da-e770-4690-bfca-2371ea1dd4cd"
     }
   ],
   "proxyMode": false,
