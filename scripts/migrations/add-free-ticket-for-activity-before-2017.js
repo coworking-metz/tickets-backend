@@ -1,3 +1,4 @@
+import 'dotenv/config.js'
 import mongo from '../../lib/util/mongo.js'
 
 const PRODUCT_TYPE = 'FREE_TICKET_FOR_ACTIVITY_BEFORE_2017_02_01'
