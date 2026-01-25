@@ -58,7 +58,8 @@ import {
   updateMemberMembership,
   updateMemberSubscription,
   updateMemberTicketsOrder,
-  updatePresence
+  updatePresence,
+  addMemberSubscription
 } from './lib/api.js'
 
 import {authRouter, ensureAccess, ensureAdmin, ensureToken, multiAuth} from './lib/auth.js'
@@ -123,6 +124,7 @@ app.put('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), 
 app.delete('/api/members/:userId/tickets/:ticketId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberTicketsOrder))
 
 app.get('/api/members/:userId/subscriptions', w(multiAuth), w(ensureAccess), w(getMemberSubscriptions))
+app.post('/api/members/:userId/subscriptions', express.json(), w(multiAuth), w(ensureAdmin), w(addMemberSubscription))
 app.put('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberSubscription))
 app.delete('/api/members/:userId/subscriptions/:subscriptionId', express.json(), w(multiAuth), w(ensureAdmin), w(removeMemberSubscription))
 
