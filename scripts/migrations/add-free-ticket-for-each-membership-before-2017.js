@@ -1,3 +1,4 @@
+import 'dotenv/config.js'
 import mongo from '../../lib/util/mongo.js'
 
 await mongo.connect()

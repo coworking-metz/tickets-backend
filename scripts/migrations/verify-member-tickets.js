@@ -1,3 +1,4 @@
+import 'dotenv/config.js'
 import {computeBalance} from '../../lib/calc.js'
 import {computeMemberActivityCoverage, getAllUsers} from '../../lib/models/member.js'
 import mongo from '../../lib/util/mongo.js'
