@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# TZ=UTC in order to have consistent date handling regardless of server locale
 node scripts/migrations/add-free-ticket-for-each-membership-before-2017.js
 node scripts/migrations/add-free-ticket-for-activity-before-2017.js
 node scripts/migrations/migrate-abos-to-subscriptions.js
