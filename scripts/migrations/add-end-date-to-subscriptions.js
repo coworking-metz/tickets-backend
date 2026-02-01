@@ -1,19 +1,10 @@
 import 'dotenv/config.js'
 import process from 'node:process'
-import {sub, add} from 'date-fns'
 import mongo from '../../lib/util/mongo.js'
+import {computeSubscriptionEndDate} from '../../lib/calc.js'
 
 // Pour activer le dry-run, définir DRY_RUN=true dans l'environnement
 const DRY_RUN = process.env.DRY_RUN === 'true'
-
-/**
- * Compute subscription end date based on start date
- * Add (1 month - 1 day) to the starting date
- * ensure that 12 subscriptions are equivalent to 1 year
- */
-function computeSubscriptionEndDate(startDate) {
-  return sub(add(new Date(startDate), {months: 1}), {days: 1}).toISOString().slice(0, 10)
-}
 
 await mongo.connect()
 
@@ -32,12 +23,12 @@ try {
 
   if (subscriptions.length > 0) {
     // Préparer les opérations de mise à jour
-    const updateOperations = subscriptions.map(sub => ({
+    const updateOperations = subscriptions.map(s => ({
       updateOne: {
-        filter: {_id: sub._id},
+        filter: {_id: s._id},
         update: {
           $set: {
-            endDate: computeSubscriptionEndDate(sub.startDate)
+            endDate: computeSubscriptionEndDate(s.startDate)
           }
         }
       }
@@ -45,14 +36,13 @@ try {
 
     if (DRY_RUN) {
       console.log(`[DRY-RUN] ${subscriptions.length} subscriptions seraient mises à jour.`)
-      // Afficher quelques exemples
       console.log('\nExemples de subscriptions à migrer :')
-      for (const sub of subscriptions.slice(0, 3)) {
-        console.log(`  ${sub._id}: startDate=${sub.startDate} -> endDate=${computeSubscriptionEndDate(sub.startDate)}`)
+      for (const s of subscriptions.slice(0, 10)) {
+        console.log(`  ${s._id}: startDate=${s.startDate} -> endDate=${computeSubscriptionEndDate(s.startDate)}`)
       }
     } else {
-      // Exécuter les mises à jour par batch de 1000
-      const batchSize = 1000
+      // Exécuter les mises à jour par batch de 100
+      const batchSize = 100
       for (let i = 0; i < updateOperations.length; i += batchSize) {
         const batch = updateOperations.slice(i, i + batchSize)
         // eslint-disable-next-line no-await-in-loop
