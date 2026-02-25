@@ -68,9 +68,9 @@ import {logAuditTrail} from './lib/models/audit.js'
 import {ping} from './lib/ping.js'
 import {getAllEvents} from './lib/services/calendar.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
-import {pressRemoteButton} from './lib/services/shelly-parking-remote.js'
 import {precomputeStats} from './lib/stats.js'
 import {logListenUrls} from './lib/util/tools.js'
+import {openSDIS1} from './lib/services/md-proxy.js'
 
 await mongo.connect()
 await cache.load()
@@ -205,7 +205,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
     throw createHttpError(403, 'Accès insuffisant pour ouvrir la barrière')
   }
 
-  await pressRemoteButton()
+  await openSDIS1()
 
   logAuditTrail(req.user, 'PARKING_ACCESS')
 
