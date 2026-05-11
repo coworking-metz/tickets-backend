@@ -61,6 +61,20 @@
           "uuid": "37e0ee28-689d-4e8f-a652-56dd63d52f08"
         }
       ]
+    },
+    {
+      "uuid": "f30c36cf-d532-4770-a3ff-1dac156ea026",
+      "name": "Probe",
+      "children": [
+        {
+          "type": "route",
+          "uuid": "816f0ae1-b664-4e9c-a7c3-ec477c2a91f5"
+        },
+        {
+          "type": "route",
+          "uuid": "7402b032-46dd-44cb-adfa-86c226b57cf9"
+        }
+      ]
     }
   ],
   "routes": [
@@ -73,7 +87,7 @@
       "responses": [
         {
           "uuid": "d99d7d74-53ef-4442-b960-294f39fee824",
-          "body": "[\n  {\n    \"entity_id\": \"binary_sensor.orange_telephone_booth_occupied\",\n    \"state\": \"off\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"Orange telephone booth occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.blue_telephone_booth_occupied\",\n    \"state\": \"on\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"Blue telephone booth occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.flexispot_a_occupied\",\n    \"state\": \"off\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"FlexiSpot A occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.flexispot_b_occupied\",\n    \"state\": \"off\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"FlexiSpot B occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_temperature\",\n    \"state\": \"20\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"°C\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"temperature\",\n      \"friendly_name\": \"Netatmo Station Big Température\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_co2\",\n    \"state\": \"1247\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"ppm\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"carbon_dioxide\",\n      \"friendly_name\": \"Netatmo Station Big Dioxyde de carbone\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_noise\",\n    \"state\": \"42\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"dB\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"sound_pressure\",\n      \"friendly_name\": \"Netatmo Station Big Bruit\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_humidity\",\n    \"state\": \"61\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"%\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"humidity\",\n      \"friendly_name\": \"Netatmo Station Big Humidité\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_small_temperature\",\n    \"state\": \"20\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"°C\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"temperature\",\n      \"friendly_name\": \"Netatmo Station Small Température\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_small_humidity\",\n    \"state\": \"61\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"%\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"humidity\",\n      \"friendly_name\": \"Netatmo Station Small Humidité\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"lock.porte_de_la_terrasse\",\n    \"state\": \"locked\",\n    \"attributes\": {\n      \"friendly_name\": \"Porte de la terrasse\",\n      \"supported_features\": 0\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  }\n]",
+          "body": "[\n  {\n    \"entity_id\": \"binary_sensor.orange_telephone_booth_occupied\",\n    \"state\": \"{{#if (faker 'datatype.boolean')}}on{{else}}off{{/if}}\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"Orange telephone booth occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.blue_telephone_booth_occupied\",\n    \"state\": \"{{#if (faker 'datatype.boolean')}}on{{else}}off{{/if}}\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"Blue telephone booth occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.flexispot_a_occupied\",\n    \"state\": \"{{#if (faker 'datatype.boolean')}}on{{else}}off{{/if}}\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"FlexiSpot A occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"binary_sensor.flexispot_b_occupied\",\n    \"state\": \"{{#if (faker 'datatype.boolean')}}on{{else}}off{{/if}}\",\n    \"attributes\": {\n      \"device_class\": \"occupancy\",\n      \"friendly_name\": \"FlexiSpot B occupied\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_temperature\",\n    \"state\": \"{{ faker 'number.int' min=12 max=25 }}\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"°C\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"temperature\",\n      \"friendly_name\": \"Netatmo Station Big Température\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_co2\",\n    \"state\": \"{{ faker 'number.int' min=400 max=3000 }}\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"ppm\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"carbon_dioxide\",\n      \"friendly_name\": \"Netatmo Station Big Dioxyde de carbone\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_noise\",\n    \"state\": \"{{ faker 'number.int' min=35 max=50 }}\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"dB\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"sound_pressure\",\n      \"friendly_name\": \"Netatmo Station Big Bruit\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_big_humidity\",\n    \"state\": \"{{ faker 'number.int' min=40 max=70 }}\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"%\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"humidity\",\n      \"friendly_name\": \"Netatmo Station Big Humidité\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_small_temperature\",\n    \"state\": \"{{ faker 'number.int' min=12 max=25 }}\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"°C\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"temperature\",\n      \"friendly_name\": \"Netatmo Station Small Température\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"sensor.netatmo_station_small_humidity\",\n    \"state\": \"{{ faker 'number.int' min=40 max=70 }}\",\n    \"attributes\": {\n      \"state_class\": \"measurement\",\n      \"unit_of_measurement\": \"%\",\n      \"attribution\": \"Data provided by Netatmo\",\n      \"device_class\": \"humidity\",\n      \"friendly_name\": \"Netatmo Station Small Humidité\"\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  },\n  {\n    \"entity_id\": \"lock.porte_de_la_terrasse\",\n    \"state\": \"{{#if (faker 'datatype.boolean')}}unlocked{{else}}locked{{/if}}\",\n    \"attributes\": {\n      \"friendly_name\": \"Porte de la terrasse\",\n      \"supported_features\": 0\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  }\n]",
           "latency": 0,
           "statusCode": 200,
           "label": "",
@@ -354,6 +368,68 @@
       "responseMode": null,
       "streamingMode": null,
       "streamingInterval": 0
+    },
+    {
+      "uuid": "816f0ae1-b664-4e9c-a7c3-ec477c2a91f5",
+      "type": "http",
+      "documentation": "Retrieve information about the HTTP request initiator",
+      "method": "get",
+      "endpoint": "probe/info",
+      "responses": [
+        {
+          "uuid": "0edf8d76-6437-4f37-aeda-7731d03e212c",
+          "body": "{\n  \"device\": {\n    \"name\": \"\",\n    \"macAddress\": \"{{ faker 'internet.mac' }}\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "7402b032-46dd-44cb-adfa-86c226b57cf9",
+      "type": "http",
+      "documentation": "",
+      "method": "options",
+      "endpoint": "probe/info",
+      "responses": [
+        {
+          "uuid": "e77ae0c3-7faf-4167-b23d-a33c963f0a0f",
+          "body": "",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "rootChildren": [
@@ -372,6 +448,10 @@
     {
       "type": "folder",
       "uuid": "4ad5c5da-e770-4690-bfca-2371ea1dd4cd"
+    },
+    {
+      "type": "folder",
+      "uuid": "f30c36cf-d532-4770-a3ff-1dac156ea026"
     }
   ],
   "proxyMode": false,
