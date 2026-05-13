@@ -114,14 +114,7 @@ yarn dev
 
 ## Email notifications
 
-Tickets bundles a script to send notification emails to members.
-You should consider executing this script once a day, at the end of the day.
-
-```bash
-node scripts/send-notification-emails.js
-```
-
-Pro-tips: use `crontab -e`
+Emails are automatically sent to members on arrival (= first time of the day they appear located on site).
 
 When improving emails and to make sure the email is properly rendered, you can start [Greenmail](https://greenmail-mail-test.github.io/greenmail/) and [Roundcube](https://roundcube.net/) with `docker-compose up`.
 This will setup a SMTP/IMAP server and a WebUI for test purposes.
@@ -132,11 +125,6 @@ SMTP_HOST=localhost
 SMTP_PORT=33025
 SMTP_USER=anyUser
 SMTP_PASS=anyPassword
-```
-
-You should use the following command to take into account the local config when sending emails:
-```bash
-node --env-file .env scripts/send-notification-emails.js
 ```
 
 Once emails have been sent, you can read them at http://localhost:38000.
