@@ -75,6 +75,16 @@
           "uuid": "7402b032-46dd-44cb-adfa-86c226b57cf9"
         }
       ]
+    },
+    {
+      "uuid": "ab786c54-8379-4c1b-b8cb-3d8a5eea8e04",
+      "name": "MD proxy",
+      "children": [
+        {
+          "type": "route",
+          "uuid": "6db5a01c-d317-4bf4-a2af-c195bfb76682"
+        }
+      ]
     }
   ],
   "routes": [
@@ -430,6 +440,37 @@
       "responseMode": null,
       "streamingMode": null,
       "streamingInterval": 0
+    },
+    {
+      "uuid": "6db5a01c-d317-4bf4-a2af-c195bfb76682",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "md-proxy/api/services/open-sdis1",
+      "responses": [
+        {
+          "uuid": "568ef7d0-fea3-4392-b995-542d8105e5fd",
+          "body": "",
+          "latency": 0,
+          "statusCode": 204,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "rootChildren": [
@@ -452,6 +493,10 @@
     {
       "type": "folder",
       "uuid": "f30c36cf-d532-4770-a3ff-1dac156ea026"
+    },
+    {
+      "type": "folder",
+      "uuid": "ab786c54-8379-4c1b-b8cb-3d8a5eea8e04"
     }
   ],
   "proxyMode": false,
