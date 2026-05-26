@@ -18,6 +18,7 @@ import {validateAndParseJson} from './lib/util/woocommerce.js'
 
 import devicesRoutes from './lib/routes/devices.js'
 import onPremiseRoutes from './lib/routes/on-premise.js'
+import pushTokensRoutes from './lib/routes/push-tokens.js'
 import statsRoutes from './lib/routes/stats.js'
 
 import * as Member from './lib/models/member.js'
@@ -140,6 +141,7 @@ app.get('/api/members/:userId/capabilities', w(multiAuth), w(ensureAdmin), w(get
 app.put('/api/members/:userId/capabilities', express.json(), w(multiAuth), w(ensureAdmin), w(updateMemberCapabilities))
 app.post('/api/members/:userId/sync-wordpress', w(multiAuth), w(ensureAccess), w(forceWordpressSync))
 app.use('/api/members/:userId/devices', w(multiAuth), w(ensureAccess), devicesRoutes)
+app.use('/api/members/:userId/push-tokens', w(multiAuth), w(ensureAccess), pushTokensRoutes)
 
 /* Deprecated */
 app.get('/api/members/:userId/mac-addresses', w(multiAuth), w(ensureAccess), w(getMemberDevices))
