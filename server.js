@@ -72,6 +72,7 @@ import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButt
 import {precomputeStats} from './lib/stats.js'
 import {logListenUrls} from './lib/util/tools.js'
 import {openSDIS1} from './lib/services/md-proxy.js'
+import {openParkingBarrier} from './lib/services/portaphone.js'
 
 await mongo.connect()
 await cache.load()
@@ -207,7 +208,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
     throw createHttpError(403, 'Accès insuffisant pour ouvrir la barrière')
   }
 
-  await openSDIS1().catch(error => {
+  const {openedAt} = await openParkingBarrier().catch(error => {
     notifyOnSignal(`Impossible d'ouvrir la barrière du parking :\n${error.message}`)
       .catch(notifyError => {
         console.error('Unable to notify about /parking error', notifyError)
@@ -217,12 +218,11 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
 
   logAuditTrail(req.user, 'PARKING_ACCESS')
 
-  const now = new Date()
   res.send({
-    triggered: now.toISOString(),
+    triggered: openedAt,
     // It's actually 45 seconds until it starts to close
     // but we consider 60 seconds as the timeframe to enter
-    closed: add(now, {seconds: 60}).toISOString(),
+    closed: add(new Date(openedAt), {seconds: 60}).toISOString(),
     timeout: 'PT60S'
   })
 }))
