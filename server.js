@@ -71,7 +71,6 @@ import {getAllEvents} from './lib/services/calendar.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
 import {precomputeStats} from './lib/stats.js'
 import {logListenUrls} from './lib/util/tools.js'
-import {openSDIS1} from './lib/services/md-proxy.js'
 import {openParkingBarrier} from './lib/services/portaphone.js'
 
 await mongo.connect()
