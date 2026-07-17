@@ -188,7 +188,7 @@ app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) =>
   await pressIntercomButton().catch(error => {
     notifyOnSignal(`Impossible d'appuyer sur l'interphone :\n${error.message}`)
       .catch(notifyError => {
-        console.error('Unable to notify about /interphone error', notifyError)
+        console.debug('Unable to notify about /interphone error', notifyError)
       })
     throw error
   })
@@ -210,7 +210,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   const {openedAt} = await openParkingBarrier().catch(error => {
     notifyOnSignal(`Impossible d'ouvrir la barrière du parking :\n${error.message}`)
       .catch(notifyError => {
-        console.error('Unable to notify about /parking error', notifyError)
+        console.debug('Unable to notify about /parking error', notifyError)
       })
     throw error
   })
