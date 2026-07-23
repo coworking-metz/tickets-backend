@@ -30,6 +30,18 @@
         {
           "type": "route",
           "uuid": "65309de7-7760-4e5e-8399-9ca99a8b454c"
+        },
+        {
+          "type": "route",
+          "uuid": "066d9cb1-9aea-433a-92db-ef2da49e643a"
+        },
+        {
+          "type": "route",
+          "uuid": "e0543610-7054-4655-835c-e748e50323e9"
+        },
+        {
+          "type": "route",
+          "uuid": "37905ac4-c5c4-4505-8c78-0ac3e742eabb"
         }
       ]
     },
@@ -453,6 +465,99 @@
           "body": "",
           "latency": 0,
           "statusCode": 204,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "066d9cb1-9aea-433a-92db-ef2da49e643a",
+      "type": "http",
+      "documentation": "Get state of watched entities",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/climate/set_temperature",
+      "responses": [
+        {
+          "uuid": "489792e3-5321-49d2-a536-d73676256578",
+          "body": "[\n  {\n    \"entity_id\": \"{{ body 'entity_id' }}\",\n    \"state\": \"{{#if (faker 'datatype.boolean')}}auto{{else}}off{{/if}}\",\n    \"attributes\": {\n      \"min_temp\": 16,\n      \"max_temp\": 31,\n      \"target_temp_step\": 1,\n      \"current_temperature\": \"{{ faker 'number.int' min=28 max=32 }}\",\n      \"temperature\": \"{{ body 'temperature' }}\",\n      \"fan_mode\": \"{{ faker 'number.int' min=1 max=6 }}\",\n      \"preset_mode\": \"none\",\n      \"swing_mode\": \"off\",\n      \"friendly_name\": \"Airton Air Conditioner South\",\n      \"supported_features\": 441\n    },\n    \"last_changed\": \"{{ now }}\",\n    \"last_reported\": \"{{ now }}\",\n    \"last_updated\": \"{{ now }}\"\n  }\n]",
+          "latency": 3000,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "e0543610-7054-4655-835c-e748e50323e9",
+      "type": "http",
+      "documentation": "Get state of watched entities",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/climate/turn_on",
+      "responses": [
+        {
+          "uuid": "c2a1bdc5-b964-4c42-8914-0d32a0c5a574",
+          "body": "[]",
+          "latency": 1000,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "37905ac4-c5c4-4505-8c78-0ac3e742eabb",
+      "type": "http",
+      "documentation": "Get state of watched entities",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/climate/turn_off",
+      "responses": [
+        {
+          "uuid": "e455cb53-b489-47c8-9624-2c779c096cb6",
+          "body": "[]",
+          "latency": 1000,
+          "statusCode": 200,
           "label": "",
           "headers": [],
           "bodyType": "INLINE",
