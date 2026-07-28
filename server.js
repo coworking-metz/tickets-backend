@@ -43,6 +43,7 @@ import {
   getMemberMemberships,
   getMemberSubscriptions,
   getMemberTicketsOrders,
+  getMemberAttributes,
   getUsersStats,
   getVotingMembers,
   heartbeat,
@@ -60,6 +61,7 @@ import {
   updateMemberMembership,
   updateMemberSubscription,
   updateMemberTicketsOrder,
+  updateMember,
   updatePresence,
   addMemberSubscription
 } from './lib/api.js'
@@ -114,7 +116,10 @@ app.get('/coworkersNow', w(coworkersNow)) // Legacy
 /* General purpose */
 
 app.get('/api/members', w(multiAuth), w(ensureAdmin), w(getAllMembers))
+// Declared before /:userId, otherwise the param route would capture "attributes"
+app.get('/api/members/attributes', w(multiAuth), w(ensureAdmin), w(getMemberAttributes))
 app.get('/api/members/:userId', w(multiAuth), w(ensureAccess), w(getMemberInfos))
+app.put('/api/members/:userId', express.json(), w(multiAuth), w(ensureAdmin), w(updateMember))
 app.get('/api/members/:userId/audit', w(multiAuth), w(ensureAdmin), w(getMemberAuditTrail))
 
 app.get('/api/members/:userId/activity', w(multiAuth), w(ensureAccess), w(getMemberActivityCoverage))
