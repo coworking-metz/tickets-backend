@@ -5,7 +5,6 @@ import process from 'node:process'
 
 import cors from 'cors'
 import {add} from 'date-fns'
-import {utcToZonedTime} from 'date-fns-tz'
 import express from 'express'
 import createHttpError from 'http-errors'
 import morgan from 'morgan'
@@ -17,7 +16,7 @@ import w from './lib/util/w.js'
 import {validateAndParseJson} from './lib/util/woocommerce.js'
 
 import devicesRoutes from './lib/routes/devices.js'
-import onPremiseRoutes from './lib/routes/on-premise.js'
+import onPremiseRoutes, {unlockFrontGate} from './lib/routes/on-premise.js'
 import pushTokensRoutes from './lib/routes/push-tokens.js'
 import statsRoutes from './lib/routes/stats.js'
 
@@ -70,7 +69,7 @@ import {authRouter, ensureAccess, ensureAdmin, ensureToken, multiAuth} from './l
 import {logAuditTrail} from './lib/models/audit.js'
 import {ping} from './lib/ping.js'
 import {getAllEvents} from './lib/services/calendar.js'
-import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal, pressIntercomButton} from './lib/services/home-assistant.js'
+import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal} from './lib/services/home-assistant.js'
 import {precomputeStats} from './lib/stats.js'
 import {logListenUrls} from './lib/util/tools.js'
 import {openParkingBarrier} from './lib/services/portaphone.js'
@@ -174,38 +173,8 @@ app.post('/api/sync-user-webhook', validateAndParseJson, w(syncUserWebhook))
 
 /* Services */
 
-app.post('/api/interphone', w(multiAuth), w(ensureAccess), w(async (req, res) => {
-  if (!req.isAdmin && !req.user?.capabilities.includes('UNLOCK_GATE')) {
-    throw createHttpError(403, 'Accès insuffisant pour déverrouiller la porte')
-  }
-
-  const hourStart = Number.parseInt(process.env.GATE_OPEN_HOUR_START || '7', 10)
-  const hourEnd = Number.parseInt(process.env.GATE_OPEN_HOUR_END || '23', 10)
-
-  const now = new Date()
-  const nowParis = utcToZonedTime(now, 'Europe/Paris')
-  const currentHour = nowParis.getHours()
-
-  if (currentHour < hourStart || currentHour >= hourEnd) {
-    throw createHttpError(403, `Le déverouillage de la porte n'est autorisé que de ${`${hourStart}`.padStart(2, '0')}h à ${`${hourEnd}`.padStart(2, '0')}h`)
-  }
-
-  await pressIntercomButton().catch(error => {
-    notifyOnSignal(`Impossible d'appuyer sur l'interphone :\n${error.message}`)
-      .catch(notifyError => {
-        console.debug('Unable to notify about /interphone error', notifyError)
-      })
-    throw error
-  })
-
-  logAuditTrail(req.user, 'UNLOCK_GATE')
-
-  res.send({
-    triggered: now.toISOString(),
-    locked: add(now, {seconds: 3}).toISOString(),
-    timeout: 'PT3S'
-  })
-}))
+// @deprecated: alias for /api/on-premise/unlock-gate
+app.post('/api/interphone', w(multiAuth), w(ensureAccess), express.json(), w(unlockFrontGate))
 
 app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   if (!req.isAdmin && !req.user?.capabilities.includes('PARKING_ACCESS')) {
@@ -213,7 +182,7 @@ app.post('/api/parking', w(multiAuth), w(ensureAccess), w(async (req, res) => {
   }
 
   const {openedAt} = await openParkingBarrier().catch(error => {
-    notifyOnSignal(`Impossible d'ouvrir la barrière du parking :\n${error.message}`)
+    notifyOnSignal(`Impossible d'ouvrir la barrière du parking (${req.user.name}) :\n${error.message}`)
       .catch(notifyError => {
         console.debug('Unable to notify about /parking error', notifyError)
       })

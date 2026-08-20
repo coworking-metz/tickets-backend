@@ -42,6 +42,10 @@
         {
           "type": "route",
           "uuid": "37905ac4-c5c4-4505-8c78-0ac3e742eabb"
+        },
+        {
+          "type": "route",
+          "uuid": "a27c5b08-a6ea-499c-969a-cde92f6f0775"
         }
       ]
     },
@@ -558,6 +562,37 @@
           "body": "[]",
           "latency": 1000,
           "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "a27c5b08-a6ea-499c-969a-cde92f6f0775",
+      "type": "http",
+      "documentation": "Unlock front gate for a optional duration",
+      "method": "post",
+      "endpoint": "home-assistant/api/services/esphome/esp32_poe_iso_unlock_door",
+      "responses": [
+        {
+          "uuid": "fd5c650f-092e-401d-8486-29914b42deb0",
+          "body": "",
+          "latency": 1000,
+          "statusCode": 204,
           "label": "",
           "headers": [],
           "bodyType": "INLINE",
