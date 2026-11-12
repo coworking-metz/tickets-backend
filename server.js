@@ -70,7 +70,6 @@ import {logAuditTrail} from './lib/models/audit.js'
 import {ping} from './lib/ping.js'
 import {getAllEvents} from './lib/services/calendar.js'
 import {getOpenSpaceSensorsFormattedAsNetatmo, notifyOnSignal} from './lib/services/home-assistant.js'
-import {precomputeStats} from './lib/stats.js'
 import {logListenUrls} from './lib/util/tools.js'
 import {openParkingBarrier} from './lib/services/portaphone.js'
 
@@ -233,8 +232,3 @@ const port = process.env.PORT || 8000
 app.listen(port, () => {
   logListenUrls(port)
 })
-
-// Précalcul des données
-if (process.env.PRECOMPUTE_STATS === '1') {
-  await precomputeStats()
-}
